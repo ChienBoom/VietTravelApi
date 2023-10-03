@@ -19,8 +19,7 @@ namespace VietTravelApi.Models
         [Required]
         [DataType(DataType.DateTime)]
         public DateTime EndTime { get; set; }
-        public Decimal Price { get; set; }
-        public long TicketDetailId { get; set; }
-        public TicketDetail TicketDetail { get; set;}
+        public Boolean TicketEnable { get; set; }
+        public Decimal PriceTicket { get; set; }
     }
 }

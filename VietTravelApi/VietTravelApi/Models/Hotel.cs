@@ -23,12 +23,10 @@ namespace VietTravelApi.Models
 		public string PhoneNumber { get; set; }
 		[StringLength(1000)]
 		public string Description { get; set; }
-		public long TourId { get; set; }
-		[Required]
-        [JsonIgnore]
-        public Tour Tour { get; set; }
-		public List<TicketDetail> TicketDetails { get; set; }
-		//[JsonIgnore]
-		//public List<TicketDetail> TicketDetails { get; set; }
+		[StringLength(1000)]
+		public string TitleIntroduct { get; set; }
+		[StringLength(2000)]
+		public string ContentIntroduct { get; set; }
+		public List<TourPackage> TourPackages { get; set; }
 	}
 }

@@ -26,12 +26,6 @@ namespace VietTravelApi.Models
         [Required]
         [StringLength(255)]
         public string Address { get; set; }
-        public long TourId { get; set; }
-        [Required]
-        [JsonIgnore]
-        public Tour Tour { get; set; }
-        public long TicketDetailId { get; set; }
-        [JsonIgnore]
-        public TicketDetail TicketDetail { get; set;}
+
     }
 }

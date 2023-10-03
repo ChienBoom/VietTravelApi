@@ -6,17 +6,16 @@ namespace VietTravelApi.Context
     public class DataContext : DbContext
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
-        DbSet<City> City { get; set; }
-        DbSet<Evaluate> Evaluate { get; set; }
-        DbSet<Hotel> Hotel { get; set; }
-        DbSet<Schedule > Schedule { get; set; }
-        DbSet<Ticket> Ticket { get; set; }
-        DbSet<TicketDetail> TicketDetail { get; set; }
-        DbSet<Tour> Tour { get; set; }
-        DbSet<Tour_TourPackage> Tour_TourPackage { get; set; }
-        DbSet<TourGuide> TourGuide { get; set; }
-        DbSet<TourPackage > TourPackage { get; set; }
-        DbSet<User> User { get; set; }
+        public DbSet<City> City { get; set; }
+        public DbSet<Evaluate> Evaluate { get; set; }
+        public DbSet<Hotel> Hotel { get; set; }
+        public DbSet<Schedule > Schedule { get; set; }
+        public DbSet<Ticket> Ticket { get; set; }
+        public DbSet<TimePackage> TimePackage { get; set; }
+        public DbSet<Tour> Tour { get; set; }
+        public DbSet<TourGuide> TourGuide { get; set; }
+        public DbSet<TourPackage> TourPackage { get; set; }
+        public DbSet<User> User { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -25,53 +24,25 @@ namespace VietTravelApi.Context
                 .WithOne(a => a.City)
                 .HasForeignKey(a => a.CityId);
             modelBuilder.Entity<Tour>()
-                .HasMany(p => p.Evaluates)
+                .HasOne(p => p.Evaluate)
                 .WithOne(a => a.Tour)
-                .HasForeignKey(a => a.TourId);
-            modelBuilder.Entity<User>()
-                .HasMany(p => p.Evaluates)
-                .WithOne(a => a.User)
-                .HasForeignKey(a => a.UserId);
+                .HasForeignKey<Tour>(a => a.EvaluateId);
             modelBuilder.Entity<Tour>()
-                .HasMany(p => p.Tickets)
+                .HasMany(p => p.TourPackages)
                 .WithOne(a => a.Tour)
                 .HasForeignKey(a => a.TourId);
-            modelBuilder.Entity<Tour>()
-                .HasMany(p => p.TourGuides)
-                .WithOne(a => a.Tour)
-                .HasForeignKey(a => a.TourId);
-            modelBuilder.Entity<Tour>()
-                .HasMany(p => p.Hotels)
-                .WithOne(a => a.Tour)
-                .HasForeignKey(a => a.TourId);
-            modelBuilder.Entity<Tour>()
-                .HasMany(p => p.Tour_TourPackages)
-                .WithOne(a => a.Tour)
-                .HasForeignKey(a => a.TourId);
+            modelBuilder.Entity<TimePackage>()
+                .HasMany(p => p.TourPackages)
+                .WithOne(a => a.TimePackage)
+                .HasForeignKey(a => a.TimePackageId);
+            modelBuilder.Entity<Hotel>()
+                .HasMany(p => p.TourPackages)
+                .WithOne(a => a.Hotel)
+                .HasForeignKey(a => a.HotelId);
             modelBuilder.Entity<Ticket>()
-                .HasOne(p => p.TicketDetail)
+                .HasOne(p => p.TourPackage)
                 .WithOne(a => a.Ticket)
-                .HasForeignKey<Ticket>(a => a.TicketDetailId);
-            modelBuilder.Entity<TicketDetail>()
-                .HasMany(p => p.TourGuides)
-                .WithOne(a => a.TicketDetail)
-                .HasForeignKey(a => a.TicketDetailId);
-            modelBuilder.Entity<TourPackage>()
-                .HasMany(p => p.Tour_TourPackages)
-                .WithOne(a => a.TourPackage)
-                .HasForeignKey(a => a.TourPackageId);
-            modelBuilder.Entity<TourPackage>()
-                .HasMany(p => p.Tour_TourPackages)
-                .WithOne(a => a.TourPackage)
-                .HasForeignKey(a => a.TourPackageId);
-            modelBuilder.Entity<TourPackage>()
-                .HasMany(p => p.TicketDetails)
-                .WithOne(a => a.TourPackage)
-                .HasForeignKey(a => a.TourPackageId);
-            modelBuilder.Entity<TicketDetail>()
-                .HasMany(p => p.Schedules)
-                .WithOne(a => a.TicketDetail)
-                .HasForeignKey(a => a.TicketDetailId);
+                .HasForeignKey<Ticket>(a => a.TourPackageId);
             modelBuilder.Entity<User>()
                 .HasMany(p => p.Tickets)
                 .WithOne(a => a.User)

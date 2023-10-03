@@ -17,14 +17,12 @@ namespace VietTravelApi.Models
 		public DateTime BookingDate { get; set; }
 		[StringLength(255)]
 		public string Description { get; set; }
-		public long TourId { get; set; }
+		public long TourPackageId { get; set; }
 		[Required]
-		public Tour Tour { get; set; }
+		public TourPackage TourPackage { get; set; }
 		public long UserId { get; set; }
 		[Required]
 		[JsonIgnore]
 		public User User { get; set; }
-        public long TicketDetailId { get; set; }
-        public TicketDetail TicketDetail { get; set; }
     }
 }

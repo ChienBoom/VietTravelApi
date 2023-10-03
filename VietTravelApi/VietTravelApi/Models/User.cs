@@ -36,11 +36,6 @@ namespace VietTravelApi.Models
 		[Required]
 		[StringLength(50)]
 		public string Role { get; set; }
-		[JsonIgnore]
-		public List<Evaluate> Evaluates { get; set; }
-
 		public List<Ticket> Tickets { get; set; }
-		//      [NotMapped]
-		//      public List<string> Otp { get; set; }
 	}
 }

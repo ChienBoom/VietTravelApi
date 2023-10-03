@@ -14,18 +14,9 @@ namespace VietTravelApi.Models
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		public long Id { get; set; }
 		[Required]
-		[StringLength(2000)]
-		public string Content { get; set; }
-		[Required]
-        [DataType(DataType.DateTime)]
-        public DateTime DateOfEvaluate { get; set; }
-		[Required]
-		public int NumberOfInteractions { get; set; }
+		public int NumberOfEvaluate { get; set; }
 		public float MediumStar { get; set; }
-		public long TourId { get; set; }
 		[JsonIgnore]
 		public Tour Tour { get; set; }
-		public long UserId { get; set; }
-		public User User { get; set; }
-	}
+    }
 }

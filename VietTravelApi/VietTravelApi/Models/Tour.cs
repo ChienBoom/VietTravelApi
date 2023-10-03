@@ -31,14 +31,10 @@ namespace VietTravelApi.Models
         [StringLength(2000)]
         public string ContentIntroduct { get; set; }
 		public long CityId { get; set; }
-		[Required]
 		[JsonIgnore]
 		public City City { get; set; }
-		public List<Evaluate> Evaluates { get; set; }
-		public List<TourGuide> TourGuides { get; set; }
-		public List<Hotel> Hotels { get; set; }
-        public List<Tour_TourPackage> Tour_TourPackages { get; set; }
-        [JsonIgnore]
-        public List<Ticket> Tickets { get; set; }
+		public long EvaluateId { get; set; }
+		public Evaluate Evaluate { get; set; }
+		public List<TourPackage> TourPackages { get; set; }
     }
 }

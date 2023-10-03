@@ -10,7 +10,7 @@ using VietTravelApi.Context;
 namespace VietTravelApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20231002041514_Init")]
+    [Migration("20231003031507_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -65,31 +65,16 @@ namespace VietTravelApi.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(2000)")
-                        .HasMaxLength(2000);
-
-                    b.Property<DateTime>("DateOfEvaluate")
-                        .HasColumnType("datetime2");
-
                     b.Property<float>("MediumStar")
                         .HasColumnType("real");
 
-                    b.Property<int>("NumberOfInteractions")
+                    b.Property<int>("NumberOfEvaluate")
                         .HasColumnType("int");
 
                     b.Property<long>("TourId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("UserId")
-                        .HasColumnType("bigint");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("TourId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("evaluate");
                 });
@@ -106,6 +91,10 @@ namespace VietTravelApi.Migrations
                         .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
+                    b.Property<string>("ContentIntroduct")
+                        .HasColumnType("nvarchar(2000)")
+                        .HasMaxLength(2000);
+
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(1000)")
                         .HasMaxLength(1000);
@@ -120,12 +109,11 @@ namespace VietTravelApi.Migrations
                         .HasColumnType("nvarchar(12)")
                         .HasMaxLength(12);
 
-                    b.Property<long>("TourId")
-                        .HasColumnType("bigint");
+                    b.Property<string>("TitleIntroduct")
+                        .HasColumnType("nvarchar(1000)")
+                        .HasMaxLength(1000);
 
                     b.HasKey("Id");
-
-                    b.HasIndex("TourId");
 
                     b.ToTable("hotel");
                 });
@@ -145,18 +133,16 @@ namespace VietTravelApi.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.Property<decimal>("Price")
+                    b.Property<decimal>("PriceTicket")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<long>("TicketDetailId")
-                        .HasColumnType("bigint");
+                    b.Property<bool>("TicketEnable")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("TicketDetailId");
 
                     b.ToTable("Schedule");
                 });
@@ -175,10 +161,7 @@ namespace VietTravelApi.Migrations
                         .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
-                    b.Property<long>("TicketDetailId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("TourId")
+                    b.Property<long>("TourPackageId")
                         .HasColumnType("bigint");
 
                     b.Property<long>("UserId")
@@ -186,17 +169,15 @@ namespace VietTravelApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TicketDetailId")
+                    b.HasIndex("TourPackageId")
                         .IsUnique();
-
-                    b.HasIndex("TourId");
 
                     b.HasIndex("UserId");
 
                     b.ToTable("ticket");
                 });
 
-            modelBuilder.Entity("VietTravelApi.Models.TicketDetail", b =>
+            modelBuilder.Entity("VietTravelApi.Models.TimePackage", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -204,31 +185,14 @@ namespace VietTravelApi.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("EndDay")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long>("HotelId")
-                        .HasColumnType("bigint");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<DateTime>("StartDay")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long>("TourPackageId")
-                        .HasColumnType("bigint");
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("HotelId");
-
-                    b.HasIndex("TourPackageId");
-
-                    b.ToTable("ticket_detail");
+                    b.ToTable("timepackage");
                 });
 
             modelBuilder.Entity("VietTravelApi.Models.Tour", b =>
@@ -255,6 +219,9 @@ namespace VietTravelApi.Migrations
                         .HasColumnType("nvarchar(1000)")
                         .HasMaxLength(1000);
 
+                    b.Property<long>("EvaluateId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(100)")
@@ -273,6 +240,9 @@ namespace VietTravelApi.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CityId");
+
+                    b.HasIndex("EvaluateId")
+                        .IsUnique();
 
                     b.ToTable("tour");
                 });
@@ -309,17 +279,7 @@ namespace VietTravelApi.Migrations
                         .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
-                    b.Property<long>("TicketDetailId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("TourId")
-                        .HasColumnType("bigint");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("TicketDetailId");
-
-                    b.HasIndex("TourId");
 
                     b.ToTable("tourguide");
                 });
@@ -332,39 +292,44 @@ namespace VietTravelApi.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("HotelId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.Property<int>("NumberOfAdult")
+                        .HasColumnType("int");
 
-                    b.ToTable("tourpackage");
-                });
+                    b.Property<int>("NumberOfChildren")
+                        .HasColumnType("int");
 
-            modelBuilder.Entity("VietTravelApi.Models.Tour_TourPackage", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("TimePackageId")
+                        .HasColumnType("bigint");
+
+                    b.Property<decimal>("TotalPrice")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<long>("TourId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("TourPackageId")
-                        .HasColumnType("bigint");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("HotelId");
+
+                    b.HasIndex("TimePackageId");
 
                     b.HasIndex("TourId");
 
-                    b.HasIndex("TourPackageId");
-
-                    b.ToTable("tour_toupackage");
+                    b.ToTable("tourpackage");
                 });
 
             modelBuilder.Entity("VietTravelApi.Models.User", b =>
@@ -422,71 +387,17 @@ namespace VietTravelApi.Migrations
                     b.ToTable("user");
                 });
 
-            modelBuilder.Entity("VietTravelApi.Models.Evaluate", b =>
-                {
-                    b.HasOne("VietTravelApi.Models.Tour", "Tour")
-                        .WithMany("Evaluates")
-                        .HasForeignKey("TourId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("VietTravelApi.Models.User", "User")
-                        .WithMany("Evaluates")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("VietTravelApi.Models.Hotel", b =>
-                {
-                    b.HasOne("VietTravelApi.Models.Tour", "Tour")
-                        .WithMany("Hotels")
-                        .HasForeignKey("TourId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("VietTravelApi.Models.Schedule", b =>
-                {
-                    b.HasOne("VietTravelApi.Models.TicketDetail", "TicketDetail")
-                        .WithMany("Schedules")
-                        .HasForeignKey("TicketDetailId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("VietTravelApi.Models.Ticket", b =>
                 {
-                    b.HasOne("VietTravelApi.Models.TicketDetail", "TicketDetail")
+                    b.HasOne("VietTravelApi.Models.TourPackage", "TourPackage")
                         .WithOne("Ticket")
-                        .HasForeignKey("VietTravelApi.Models.Ticket", "TicketDetailId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("VietTravelApi.Models.Tour", "Tour")
-                        .WithMany("Tickets")
-                        .HasForeignKey("TourId")
+                        .HasForeignKey("VietTravelApi.Models.Ticket", "TourPackageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("VietTravelApi.Models.User", "User")
                         .WithMany("Tickets")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("VietTravelApi.Models.TicketDetail", b =>
-                {
-                    b.HasOne("VietTravelApi.Models.Hotel", "Hotel")
-                        .WithMany("TicketDetails")
-                        .HasForeignKey("HotelId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("VietTravelApi.Models.TourPackage", "TourPackage")
-                        .WithMany("TicketDetails")
-                        .HasForeignKey("TourPackageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -498,34 +409,31 @@ namespace VietTravelApi.Migrations
                         .HasForeignKey("CityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
 
-            modelBuilder.Entity("VietTravelApi.Models.TourGuide", b =>
-                {
-                    b.HasOne("VietTravelApi.Models.TicketDetail", "TicketDetail")
-                        .WithMany("TourGuides")
-                        .HasForeignKey("TicketDetailId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("VietTravelApi.Models.Tour", "Tour")
-                        .WithMany("TourGuides")
-                        .HasForeignKey("TourId")
+                    b.HasOne("VietTravelApi.Models.Evaluate", "Evaluate")
+                        .WithOne("Tour")
+                        .HasForeignKey("VietTravelApi.Models.Tour", "EvaluateId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("VietTravelApi.Models.Tour_TourPackage", b =>
+            modelBuilder.Entity("VietTravelApi.Models.TourPackage", b =>
                 {
-                    b.HasOne("VietTravelApi.Models.Tour", "Tour")
-                        .WithMany("Tour_TourPackages")
-                        .HasForeignKey("TourId")
+                    b.HasOne("VietTravelApi.Models.Hotel", "Hotel")
+                        .WithMany("TourPackages")
+                        .HasForeignKey("HotelId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("VietTravelApi.Models.TourPackage", "TourPackage")
-                        .WithMany("Tour_TourPackages")
-                        .HasForeignKey("TourPackageId")
+                    b.HasOne("VietTravelApi.Models.TimePackage", "TimePackage")
+                        .WithMany("TourPackages")
+                        .HasForeignKey("TimePackageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("VietTravelApi.Models.Tour", "Tour")
+                        .WithMany("TourPackages")
+                        .HasForeignKey("TourId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
