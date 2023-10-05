@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using VietTravelApi.Context;
 using VietTravelApi.Models;
@@ -50,9 +51,9 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                City city = _dataContext.City.FirstOrDefault(b => b.Name == value);
-                if (city == null) return NotFound();
-                return Ok(city);
+                List<City> cities = _dataContext.City.Where(b => b.Name.ToLower().Contains(value.ToLower())).ToList();
+                if (cities == null) return NotFound();
+                return Ok(cities);
             }
             catch (Exception ex)
             {
@@ -84,6 +85,8 @@ namespace VietTravelApi.Controllers
                 var City = _dataContext.City.FirstOrDefault(b => b.Id == id);
                 if (City != null)
                 {
+                    if(value.Pictures.Equals("File null")) value.Pictures = City.Pictures;
+                    value.Tours = City.Tours;
                     _dataContext.Entry(City).CurrentValues.SetValues(value);
                     _dataContext.SaveChanges();
                     return Ok(value);

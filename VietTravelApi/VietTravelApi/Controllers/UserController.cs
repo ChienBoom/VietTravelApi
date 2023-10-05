@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Org.BouncyCastle.Asn1.Ocsp;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using VietTravelApi.Context;
 using VietTravelApi.Models;
 
@@ -113,6 +115,55 @@ namespace VietTravelApi.Controllers
             catch (Exception ex)
             {
                 return BadRequest(ex.Message.ToString());
+            }
+        }
+
+        [HttpPost("/checkEmailExis")]
+        public async Task<IActionResult> checkEmailExis([FromBody] Account value)
+        {
+            try
+            {
+                var User = _dataContext.User.FirstOrDefault(b => b.Username == value.Username);
+                if (User != null)
+                {
+                    return Ok(value);
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpPost("/checkLogin")]
+        public async Task<IActionResult> checkAccountLogin([FromBody] Account value)
+        {
+            try
+            {
+                var User = _dataContext.User.FirstOrDefault(b => b.Username == value.Username);
+                if (User != null)
+                {
+                    if (value.Password == User.Password)
+                    {
+                        return Ok(User.Role);
+                    }
+                    else
+                    {
+                        return NotFound();
+                    }
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
         }
 

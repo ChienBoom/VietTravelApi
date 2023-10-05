@@ -24,10 +24,6 @@ namespace VietTravelApi.Context
                 .WithOne(a => a.City)
                 .HasForeignKey(a => a.CityId);
             modelBuilder.Entity<Tour>()
-                .HasOne(p => p.Evaluate)
-                .WithOne(a => a.Tour)
-                .HasForeignKey<Tour>(a => a.EvaluateId);
-            modelBuilder.Entity<Tour>()
                 .HasMany(p => p.TourPackages)
                 .WithOne(a => a.Tour)
                 .HasForeignKey(a => a.TourId);

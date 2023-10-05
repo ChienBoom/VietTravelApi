@@ -33,7 +33,7 @@ namespace VietTravelApi
             services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("VietTravelConnStr")));
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "VietTravelTravelApi", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "VietTravelApi", Version = "v1" });
             });
             services.AddControllers();
             services.AddOptions();

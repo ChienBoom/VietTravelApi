@@ -33,8 +33,8 @@ namespace VietTravelApi.Models
 		public long CityId { get; set; }
 		[JsonIgnore]
 		public City City { get; set; }
-		public long EvaluateId { get; set; }
-		public Evaluate Evaluate { get; set; }
-		public List<TourPackage> TourPackages { get; set; }
+        public int NumberOfEvaluate { get; set; }
+        public float MediumStar { get; set; }
+        public List<TourPackage> TourPackages { get; set; }
     }
 }
