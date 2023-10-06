@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using VietTravelApi.Context;
 using VietTravelApi.Models;
@@ -45,30 +46,30 @@ namespace VietTravelApi.Controllers
             }
         }
 
-        //[HttpGet("search/{value}")]
-        //public IActionResult SearchTour(string value)
-        //{
-        //    try
-        //    {
-        //        Tour Tour = _dataContext.Tour.FirstOrDefault(b => b.Name == value);
-        //        if (Tour == null) return NotFound();
-        //        return Ok(Tour);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(ex.Message.ToString());
-        //    }
-        //}
+        [HttpGet("search/{value}")]
+        public IActionResult SearchTour(string value)
+        {
+            try
+            {
+                List<Tour> tours = _dataContext.Tour.Where(b => b.Name.ToLower().Contains(value.ToLower())).ToList();
+                if (tours == null) return NotFound();
+                return Ok(tours);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message.ToString());
+            }
+        }
 
         [HttpPost]
         public IActionResult Post([FromBody] Tour value)
         {
-            Tour Tour = value;
+            Tour tour = value;
             try
             {
-                _dataContext.Tour.Add(Tour);
+                _dataContext.Tour.Add(tour);
                 _dataContext.SaveChanges();
-                return Ok(Tour);
+                return Ok(tour);
             }
             catch (Exception ex)
             {
@@ -81,10 +82,10 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                var Tour = _dataContext.Tour.FirstOrDefault(b => b.Id == id);
-                if (Tour != null)
+                var tour = _dataContext.Tour.FirstOrDefault(b => b.Id == id);
+                if (tour != null)
                 {
-                    _dataContext.Entry(Tour).CurrentValues.SetValues(value);
+                    _dataContext.Entry(tour).CurrentValues.SetValues(value);
                     _dataContext.SaveChanges();
                     return Ok(value);
                 }
@@ -101,10 +102,10 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                var Tour = _dataContext.Tour.FirstOrDefault(b => b.Id == id);
-                if (Tour != null)
+                var tour = _dataContext.Tour.FirstOrDefault(b => b.Id == id);
+                if (tour != null)
                 {
-                    _dataContext.Remove(Tour);
+                    _dataContext.Remove(tour);
                     _dataContext.SaveChanges();
                     return Ok();
                 }

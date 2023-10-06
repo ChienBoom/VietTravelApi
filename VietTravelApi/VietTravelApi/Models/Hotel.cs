@@ -27,6 +27,8 @@ namespace VietTravelApi.Models
 		public string TitleIntroduct { get; set; }
 		[StringLength(2000)]
 		public string ContentIntroduct { get; set; }
+		public long CityId { get; set; }
+		public string Pictures { get; set; }
 		public List<TourPackage> TourPackages { get; set; }
 	}
 }

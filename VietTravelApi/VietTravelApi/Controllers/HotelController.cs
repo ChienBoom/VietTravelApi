@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using VietTravelApi.Context;
 using VietTravelApi.Models;
@@ -45,20 +46,20 @@ namespace VietTravelApi.Controllers
             }
         }
 
-        //[HttpGet("search/{value}")]
-        //public IActionResult SearchHotel(string value)
-        //{
-        //    try
-        //    {
-        //        Hotel Hotel = _dataContext.Hotel.FirstOrDefault(b => b.Name == value);
-        //        if (Hotel == null) return NotFound();
-        //        return Ok(Hotel);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(ex.Message.ToString());
-        //    }
-        //}
+        [HttpGet("search/{value}")]
+        public IActionResult SearchHotel(string value)
+        {
+            try
+            {
+                List<Hotel> hotels = _dataContext.Hotel.Where(b => b.Name.ToLower().Contains(value.ToLower())).ToList();
+                if (hotels == null) return NotFound();
+                return Ok(hotels);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message.ToString());
+            }
+        }
 
         [HttpPost]
         public IActionResult Post([FromBody] Hotel value)
