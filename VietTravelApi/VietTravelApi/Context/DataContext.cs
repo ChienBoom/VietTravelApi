@@ -19,26 +19,26 @@ namespace VietTravelApi.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<City>()
-                .HasMany(p => p.Tours)
-                .WithOne(a => a.City)
-                .HasForeignKey(a => a.CityId);
-            modelBuilder.Entity<Tour>()
-                .HasMany(p => p.TourPackages)
-                .WithOne(a => a.Tour)
-                .HasForeignKey(a => a.TourId);
-            modelBuilder.Entity<TimePackage>()
-                .HasMany(p => p.TourPackages)
-                .WithOne(a => a.TimePackage)
-                .HasForeignKey(a => a.TimePackageId);
-            modelBuilder.Entity<Hotel>()
-                .HasMany(p => p.TourPackages)
-                .WithOne(a => a.Hotel)
-                .HasForeignKey(a => a.HotelId);
-            modelBuilder.Entity<Ticket>()
-                .HasOne(p => p.TourPackage)
-                .WithOne(a => a.Ticket)
-                .HasForeignKey<Ticket>(a => a.TourPackageId);
+            //modelBuilder.Entity<City>()
+            //    .HasMany(p => p.Tours)
+            //    .WithOne(a => a.City)
+            //    .HasForeignKey(a => a.CityId);
+            //modelBuilder.Entity<Tour>()
+            //    .HasMany(p => p.TourPackages)
+            //    .WithOne(a => a.Tour)
+            //    .HasForeignKey(a => a.TourId);
+            //modelBuilder.Entity<TimePackage>()
+            //    .HasMany(p => p.TourPackages)
+            //    .WithOne(a => a.TimePackage)
+            //    .HasForeignKey(a => a.TimePackageId);
+            //modelBuilder.Entity<Hotel>()
+            //    .HasMany(p => p.TourPackages)
+            //    .WithOne(a => a.Hotel)
+            //    .HasForeignKey(a => a.HotelId);
+            //modelBuilder.Entity<Ticket>()
+            //    .HasOne(p => p.TourPackage)
+            //    .WithOne(a => a.Ticket)
+            //    .HasForeignKey<Ticket>(a => a.TourPackageId);
             modelBuilder.Entity<User>()
                 .HasMany(p => p.Tickets)
                 .WithOne(a => a.User)

@@ -61,6 +61,20 @@ namespace VietTravelApi.Controllers
             }
         }
 
+        [HttpGet("searchByCityId/{value}")]
+        public IActionResult SearchHotelByCityId(string value)
+        {
+            try
+            {
+                List<Hotel> hotels = _dataContext.Hotel.Where(b => b.CityId == long.Parse(value)).ToList();
+                return Ok(hotels);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message.ToString());
+            }
+        }
+
         [HttpPost]
         public IActionResult Post([FromBody] Hotel value)
         {

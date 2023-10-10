@@ -31,10 +31,7 @@ namespace VietTravelApi.Models
         [StringLength(2000)]
         public string ContentIntroduct { get; set; }
 		public long CityId { get; set; }
-		[JsonIgnore]
-		public City City { get; set; }
         public int NumberOfEvaluate { get; set; }
         public float MediumStar { get; set; }
-        public List<TourPackage> TourPackages { get; set; }
     }
 }

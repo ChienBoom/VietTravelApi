@@ -26,6 +26,8 @@ namespace VietTravelApi.Models
         [Required]
         [StringLength(255)]
         public string Address { get; set; }
+        [Required]
+        public long CityId { get; set; }
 
     }
 }

@@ -18,8 +18,6 @@ namespace VietTravelApi.Models
 		[StringLength(255)]
 		public string Description { get; set; }
 		public long TourPackageId { get; set; }
-		[Required]
-		public TourPackage TourPackage { get; set; }
 		public long UserId { get; set; }
 		[Required]
 		[JsonIgnore]

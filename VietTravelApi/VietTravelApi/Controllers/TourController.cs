@@ -46,6 +46,20 @@ namespace VietTravelApi.Controllers
             }
         }
 
+        [HttpGet("searchByCityId/{value}")]
+        public IActionResult SearchTourByCityId(string value)
+        {
+            try
+            {
+                List<Tour> tours = _dataContext.Tour.Where(b => b.CityId == long.Parse(value)).ToList();
+                return Ok(tours);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message.ToString());
+            }
+        }
+
         [HttpGet("search/{value}")]
         public IActionResult SearchTour(string value)
         {
@@ -116,5 +130,6 @@ namespace VietTravelApi.Controllers
                 return BadRequest(ex.Message.ToString());
             }
         }
+
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using VietTravelApi.Context;
 using VietTravelApi.Models;
@@ -38,6 +39,20 @@ namespace VietTravelApi.Controllers
                 TourGuide TourGuide = _dataContext.TourGuide.FirstOrDefault(b => b.Id == id);
                 if (TourGuide == null) return NotFound();
                 return Ok(TourGuide);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message.ToString());
+            }
+        }
+
+        [HttpGet("searchByCityId/{value}")]
+        public IActionResult SearchTourGuideByCityId(string value)
+        {
+            try
+            {
+                List<TourGuide> tourGuides = _dataContext.TourGuide.Where(b => b.CityId == long.Parse(value)).ToList();
+                return Ok(tourGuides);
             }
             catch (Exception ex)
             {

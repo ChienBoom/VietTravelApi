@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using VietTravelApi.Context;
 using VietTravelApi.Models;
@@ -38,6 +39,20 @@ namespace VietTravelApi.Controllers
                 TourPackage TourPackage = _dataContext.TourPackage.FirstOrDefault(b => b.Id == id);
                 if (TourPackage == null) return NotFound();
                 return Ok(TourPackage);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message.ToString());
+            }
+        }
+
+        [HttpGet("searchByTourId/{value}")]
+        public IActionResult SearchTourPackageByTourId(string value)
+        {
+            try
+            {
+                List<TourPackage> tourPackages = _dataContext.TourPackage.Where(b => b.TourId == long.Parse(value)).ToList();
+                return Ok(tourPackages);
             }
             catch (Exception ex)
             {
