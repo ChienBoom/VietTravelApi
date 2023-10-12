@@ -16,6 +16,7 @@ namespace VietTravelApi.Context
         public DbSet<TourGuide> TourGuide { get; set; }
         public DbSet<TourPackage> TourPackage { get; set; }
         public DbSet<User> User { get; set; }
+        public DbSet<Restaurant> Restaurant { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

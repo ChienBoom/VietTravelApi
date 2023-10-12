@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using VietTravelApi.Context;
 using VietTravelApi.Models;
@@ -17,40 +18,25 @@ namespace VietTravelApi.Controllers
             _dataContext = dataContext;
         }
 
-        [HttpGet]
-        public IActionResult GetAllEvaluate()
-        {
-            try
-            {
-                return Ok(_dataContext.Evaluate.ToList());
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message.ToString());
-            }
-        }
-
-        [HttpGet("{id}")]
-        public IActionResult GetEvaluateById(long id)
-        {
-            try
-            {
-                Evaluate Evaluate = _dataContext.Evaluate.FirstOrDefault(b => b.Id == id);
-                if (Evaluate == null) return NotFound();
-                return Ok(Evaluate);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message.ToString());
-            }
-        }
-
-        //[HttpGet("search/{value}")]
-        //public IActionResult SearchEvaluate(string value)
+        //[HttpGet]
+        //public IActionResult GetAllEvaluate()
         //{
         //    try
         //    {
-        //        Evaluate Evaluate = _dataContext.Evaluate.FirstOrDefault(b => b.Name == value);
+        //        return Ok(_dataContext.Evaluate.ToList());
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message.ToString());
+        //    }
+        //}
+
+        //[HttpGet("{id}")]
+        //public IActionResult GetEvaluateById(long id)
+        //{
+        //    try
+        //    {
+        //        Evaluate Evaluate = _dataContext.Evaluate.FirstOrDefault(b => b.Id == id);
         //        if (Evaluate == null) return NotFound();
         //        return Ok(Evaluate);
         //    }
@@ -60,15 +46,111 @@ namespace VietTravelApi.Controllers
         //    }
         //}
 
+        [HttpGet("evaCity/{value}")]
+        public IActionResult EvaluateCityId(long value)
+        {
+            try
+            {
+                List< Evaluate> evaluates = _dataContext.Evaluate.Where(b => b.EvaId == value && b.Eva == 1).ToList();
+                if (evaluates == null) return NotFound();
+                else
+                {
+                    foreach(Evaluate eva in evaluates)
+                    {
+                        User user = _dataContext.User.FirstOrDefault(b => b.Id == eva.UserId);
+                        if(user == null) return NotFound();
+                        eva.User = user;
+                    }
+                    return Ok(evaluates);
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message.ToString());
+            }
+        }
+
+        [HttpGet("evaTour/{value}")]
+        public IActionResult EvaluateTourId(long value)
+        {
+            try
+            {
+                List<Evaluate> evaluates = _dataContext.Evaluate.Where(b => b.EvaId == value && b.Eva == 2).ToList();
+                if (evaluates == null) return NotFound();
+                else
+                {
+                    foreach (Evaluate eva in evaluates)
+                    {
+                        User user = _dataContext.User.FirstOrDefault(b => b.Id == eva.UserId);
+                        if (user == null) return NotFound();
+                        eva.User = user;
+                    }
+                    return Ok(evaluates);
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message.ToString());
+            }
+        }
+
+        [HttpGet("evaHotel/{value}")]
+        public IActionResult EvaluateHotelId(long value)
+        {
+            try
+            {
+                List<Evaluate> evaluates = _dataContext.Evaluate.Where(b => b.EvaId == value && b.Eva == 3).ToList();
+                if (evaluates == null) return NotFound();
+                else
+                {
+                    foreach (Evaluate eva in evaluates)
+                    {
+                        User user = _dataContext.User.FirstOrDefault(b => b.Id == eva.UserId);
+                        if (user == null) return NotFound();
+                        eva.User = user;
+                    }
+                    return Ok(evaluates);
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message.ToString());
+            }
+        }
+
+        [HttpGet("evaRestaurant/{value}")]
+        public IActionResult EvaluateRestaurantId(long value)
+        {
+            try
+            {
+                List<Evaluate> evaluates = _dataContext.Evaluate.Where(b => b.EvaId == value && b.Eva == 4).ToList();
+                if (evaluates == null) return NotFound();
+                else
+                {
+                    foreach (Evaluate eva in evaluates)
+                    {
+                        User user = _dataContext.User.FirstOrDefault(b => b.Id == eva.UserId);
+                        if (user == null) return NotFound();
+                        eva.User = user;
+                    }
+                    return Ok(evaluates);
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message.ToString());
+            }
+        }
+
         [HttpPost]
         public IActionResult Post([FromBody] Evaluate value)
         {
-            Evaluate Evaluate = value;
+            Evaluate evaluate = value;
             try
             {
-                _dataContext.Evaluate.Add(Evaluate);
+                _dataContext.Evaluate.Add(evaluate);
                 _dataContext.SaveChanges();
-                return Ok(Evaluate);
+                return Ok(evaluate);
             }
             catch (Exception ex)
             {
@@ -81,10 +163,10 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                var Evaluate = _dataContext.Evaluate.FirstOrDefault(b => b.Id == id);
-                if (Evaluate != null)
+                var evaluate = _dataContext.Evaluate.FirstOrDefault(b => b.Id == id);
+                if (evaluate != null)
                 {
-                    _dataContext.Entry(Evaluate).CurrentValues.SetValues(value);
+                    _dataContext.Entry(evaluate).CurrentValues.SetValues(value);
                     _dataContext.SaveChanges();
                     return Ok(value);
                 }
@@ -101,10 +183,10 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                var Evaluate = _dataContext.Evaluate.FirstOrDefault(b => b.Id == id);
-                if (Evaluate != null)
+                var evaluate = _dataContext.Evaluate.FirstOrDefault(b => b.Id == id);
+                if (evaluate != null)
                 {
-                    _dataContext.Remove(Evaluate);
+                    _dataContext.Remove(evaluate);
                     _dataContext.SaveChanges();
                     return Ok();
                 }

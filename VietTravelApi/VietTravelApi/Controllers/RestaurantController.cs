@@ -1,29 +1,28 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using System.Linq;
+using System;
 using VietTravelApi.Context;
 using VietTravelApi.Models;
+using System.Linq;
 
 namespace VietTravelApi.Controllers
 {
-    [Route("hotel")]
+    [Route("restaurant")]
     [ApiController]
-    public class HotelController : ControllerBase
+    public class RestaurantController : Controller
     {
         public DataContext _dataContext;
-        public HotelController(DataContext dataContext)
+        public RestaurantController(DataContext dataContext)
         {
             _dataContext = dataContext;
         }
 
         [HttpGet]
-        public IActionResult GetAllHotel()
+        public IActionResult GetAllRestaurant()
         {
             try
             {
-                return Ok(_dataContext.Hotel.ToList());
+                return Ok(_dataContext.Restaurant.ToList());
             }
             catch (Exception ex)
             {
@@ -32,13 +31,13 @@ namespace VietTravelApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetHotelById(long id)
+        public IActionResult GetRestaurantById(long id)
         {
             try
             {
-                Hotel Hotel = _dataContext.Hotel.FirstOrDefault(b => b.Id == id);
-                if (Hotel == null) return NotFound();
-                return Ok(Hotel);
+                Restaurant restaurant = _dataContext.Restaurant.FirstOrDefault(b => b.Id == id);
+                if (restaurant == null) return NotFound();
+                return Ok(restaurant);
             }
             catch (Exception ex)
             {
@@ -47,13 +46,13 @@ namespace VietTravelApi.Controllers
         }
 
         [HttpGet("search/{value}")]
-        public IActionResult SearchHotel(string value)
+        public IActionResult SearchRestaurant(string value)
         {
             try
             {
-                List<Hotel> hotels = _dataContext.Hotel.Where(b => b.Name.ToLower().Contains(value.ToLower())).ToList();
-                if (hotels == null) return NotFound();
-                return Ok(hotels);
+                List<Restaurant> restaurants = _dataContext.Restaurant.Where(b => b.Name.ToLower().Contains(value.ToLower())).ToList();
+                if (restaurants == null) return NotFound();
+                return Ok(restaurants);
             }
             catch (Exception ex)
             {
@@ -62,12 +61,12 @@ namespace VietTravelApi.Controllers
         }
 
         [HttpGet("searchByCityId/{value}")]
-        public IActionResult SearchHotelByCityId(string value)
+        public IActionResult SearchRestaurantByCityId(string value)
         {
             try
             {
-                List<Hotel> hotels = _dataContext.Hotel.Where(b => b.CityId == long.Parse(value)).ToList();
-                return Ok(hotels);
+                List<Restaurant> restaurants = _dataContext.Restaurant.Where(b => b.CityId == long.Parse(value)).ToList();
+                return Ok(restaurants);
             }
             catch (Exception ex)
             {
@@ -76,14 +75,14 @@ namespace VietTravelApi.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] Hotel value)
+        public IActionResult Post([FromBody] Restaurant value)
         {
-            Hotel Hotel = value;
+            Restaurant restaurant = value;
             try
             {
-                _dataContext.Hotel.Add(Hotel);
+                _dataContext.Restaurant.Add(restaurant);
                 _dataContext.SaveChanges();
-                return Ok(Hotel);
+                return Ok(restaurant);
             }
             catch (Exception ex)
             {
@@ -92,15 +91,15 @@ namespace VietTravelApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(long id, [FromBody] Hotel value)
+        public IActionResult Put(long id, [FromBody] Restaurant value)
         {
             try
             {
-                var Hotel = _dataContext.Hotel.FirstOrDefault(b => b.Id == id);
-                if (Hotel != null)
+                var restaurant = _dataContext.Restaurant.FirstOrDefault(b => b.Id == id);
+                if (restaurant != null)
                 {
-                    if (value.Pictures.Equals("File null")) value.Pictures = Hotel.Pictures;
-                    _dataContext.Entry(Hotel).CurrentValues.SetValues(value);
+                    if (value.Pictures.Equals("File null")) value.Pictures = restaurant.Pictures;
+                    _dataContext.Entry(restaurant).CurrentValues.SetValues(value);
                     _dataContext.SaveChanges();
                     return Ok(value);
                 }
@@ -117,10 +116,10 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                var Hotel = _dataContext.Hotel.FirstOrDefault(b => b.Id == id);
-                if (Hotel != null)
+                var restaurant = _dataContext.Restaurant.FirstOrDefault(b => b.Id == id);
+                if (restaurant != null)
                 {
-                    _dataContext.Remove(Hotel);
+                    _dataContext.Remove(restaurant);
                     _dataContext.SaveChanges();
                     return Ok();
                 }
