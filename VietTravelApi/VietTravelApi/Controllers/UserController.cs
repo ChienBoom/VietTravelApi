@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using VietTravelApi.Context;
 using VietTravelApi.Models;
+using VietTravelApi.Service;
 
 namespace VietTravelApi.Controllers
 {
@@ -14,9 +15,11 @@ namespace VietTravelApi.Controllers
     public class UserController : ControllerBase
     {
         public DataContext _dataContext;
-        public UserController(DataContext dataContext)
+        private readonly ISendMailService _sendMailService;
+        public UserController(DataContext dataContext, ISendMailService sendMailService)
         {
             _dataContext = dataContext;
+            _sendMailService = sendMailService;
         }
 
         [HttpGet]
@@ -47,20 +50,20 @@ namespace VietTravelApi.Controllers
             }
         }
 
-        //[HttpGet("search/{value}")]
-        //public IActionResult SearchUser(string value)
-        //{
-        //    try
-        //    {
-        //        User User = _dataContext.User.FirstOrDefault(b => b.Name == value);
-        //        if (User == null) return NotFound();
-        //        return Ok(User);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(ex.Message.ToString());
-        //    }
-        //}
+        [HttpGet("searchUserByUsername/{username}")]
+        public IActionResult GetUserByUsername(string username)
+        {
+            try
+            {
+                User User = _dataContext.User.FirstOrDefault(b => b.Username == username);
+                if (User == null) return NotFound();
+                return Ok(User);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message.ToString());
+            }
+        }
 
         [HttpPost]
         public IActionResult Post([FromBody] User value)
@@ -164,6 +167,34 @@ namespace VietTravelApi.Controllers
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost("/recoverPassword")]
+        public async Task<IActionResult> RecoverPassword([FromBody] Account value)
+        {
+            try
+            {
+                var User = _dataContext.User.FirstOrDefault(b => b.Username == value.Username);
+                if (User != null)
+                {
+                    MailContent content = new MailContent
+                    {
+                        To = value.Username,
+                        Subject = "VietTravel - Xác minh mật khẩu",
+                        Body = "Mật khẩu của bạn là:" + User.Password
+                    };
+                    _sendMailService.SendMail(content);
+                    return Ok();
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
             }
         }
 
