@@ -33,5 +33,6 @@ namespace VietTravelApi.Models
 		public long CityId { get; set; }
         public int NumberOfEvaluate { get; set; }
         public float MediumStar { get; set; }
+        public string UniCodeName { get; set; }
     }
 }

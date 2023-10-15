@@ -27,6 +27,7 @@ namespace VietTravelApi.Models
         [StringLength(2000)]
         public string ContentIntroduct { get; set; }
 		public List<Tour> Tours { get; set; }
+		public string UniCodeName { get; set; }
 
 	}
 }

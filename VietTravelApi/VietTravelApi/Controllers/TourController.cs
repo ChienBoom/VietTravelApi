@@ -65,7 +65,7 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                List<Tour> tours = _dataContext.Tour.Where(b => b.Name.ToLower().Contains(value.ToLower())).ToList();
+                List<Tour> tours = _dataContext.Tour.Where(b => b.UniCodeName.ToLower().Contains(value.ToLower())).ToList();
                 if (tours == null) return NotFound();
                 return Ok(tours);
             }

@@ -24,5 +24,6 @@ namespace VietTravelApi.Models
         public long TourId { get; set; }
         public long HotelId { get; set; }
         public long TimePackageId { get; set; }
+
     }
 }

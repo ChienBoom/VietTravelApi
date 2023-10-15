@@ -50,7 +50,7 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                List<Restaurant> restaurants = _dataContext.Restaurant.Where(b => b.Name.ToLower().Contains(value.ToLower())).ToList();
+                List<Restaurant> restaurants = _dataContext.Restaurant.Where(b => b.UniCodeName.ToLower().Contains(value.ToLower())).ToList();
                 if (restaurants == null) return NotFound();
                 return Ok(restaurants);
             }

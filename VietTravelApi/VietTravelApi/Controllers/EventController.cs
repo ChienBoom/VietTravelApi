@@ -1,29 +1,29 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
-using System.Linq;
+using System;
 using VietTravelApi.Context;
 using VietTravelApi.Models;
+using System.Linq;
 
 namespace VietTravelApi.Controllers
 {
-    [Route("city")]
+    [Route("event")]
     [ApiController]
-    public class CityController : ControllerBase
+    public class EventController : ControllerBase
     {
         public DataContext _dataContext;
-        public CityController(DataContext dataContext)
+        public EventController(DataContext dataContext)
         {
             _dataContext = dataContext;
         }
 
         [HttpGet]
-        public IActionResult GetAllCity()
+        public IActionResult GetAllEvent()
         {
             try
             {
-                return Ok(_dataContext.City.ToList());
+                return Ok(_dataContext.Event.ToList());
             }
             catch (Exception ex)
             {
@@ -32,13 +32,13 @@ namespace VietTravelApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetCityById(long id)
+        public IActionResult GetEventById(long id)
         {
             try
             {
-                City city = _dataContext.City.FirstOrDefault(b => b.Id == id);
-                if (city == null) return NotFound();
-                return Ok(city);
+                Event Event = _dataContext.Event.FirstOrDefault(b => b.Id == id);
+                if (Event == null) return NotFound();
+                return Ok(Event);
             }
             catch (Exception ex)
             {
@@ -46,14 +46,14 @@ namespace VietTravelApi.Controllers
             }
         }
 
-        [HttpGet("search/{value}")]
-        public IActionResult SearchCity(string value)
+        [HttpGet("searchEvent/{value}")]
+        public IActionResult SearchEventByTourId(string value)
         {
             try
             {
-                List<City> cities = _dataContext.City.Where(b => b.UniCodeName.ToLower().Contains(value.ToLower())).ToList();
-                if (cities == null) return NotFound();
-                return Ok(cities);
+                List<Event> events = _dataContext.Event.Where(b => b.TourId == long.Parse(value)).ToList();
+                if (events == null) return NotFound();
+                return Ok(events);
             }
             catch (Exception ex)
             {
@@ -62,14 +62,14 @@ namespace VietTravelApi.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] City value)
+        public IActionResult Post([FromBody] Event value)
         {
-            City city = value;
+            Event Event = value;
             try
             {
-                _dataContext.City.Add(city);
+                _dataContext.Event.Add(Event);
                 _dataContext.SaveChanges();
-                return Ok(city);
+                return Ok(Event);
             }
             catch (Exception ex)
             {
@@ -78,16 +78,15 @@ namespace VietTravelApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(long id, [FromBody] City value)
+        public IActionResult Put(long id, [FromBody] Event value)
         {
             try
             {
-                var City = _dataContext.City.FirstOrDefault(b => b.Id == id);
-                if (City != null)
+                var Event = _dataContext.Event.FirstOrDefault(b => b.Id == id);
+                if (Event != null)
                 {
-                    if(value.Pictures.Equals("File null")) value.Pictures = City.Pictures;
-                    value.Tours = City.Tours;
-                    _dataContext.Entry(City).CurrentValues.SetValues(value);
+                    if (value.Pictures.Equals("File null")) value.Pictures = Event.Pictures;
+                    _dataContext.Entry(Event).CurrentValues.SetValues(value);
                     _dataContext.SaveChanges();
                     return Ok(value);
                 }
@@ -104,10 +103,10 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                var City = _dataContext.City.FirstOrDefault(b => b.Id == id);
-                if (City != null)
+                var Event = _dataContext.Event.FirstOrDefault(b => b.Id == id);
+                if (Event != null)
                 {
-                    _dataContext.Remove(City);
+                    _dataContext.Remove(Event);
                     _dataContext.SaveChanges();
                     return Ok();
                 }
