@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,9 +14,13 @@ namespace VietTravelApi.Controllers
     public class CityController : ControllerBase
     {
         public DataContext _dataContext;
-        public CityController(DataContext dataContext)
+        private readonly IConfiguration _configuration;
+        public int pageSize;
+        public CityController(DataContext dataContext, IConfiguration configuration)
         {
             _dataContext = dataContext;
+            _configuration = configuration;
+            pageSize = int.Parse(_configuration["PageSize"]);
         }
 
         [HttpGet]
@@ -24,6 +29,54 @@ namespace VietTravelApi.Controllers
             try
             {
                 return Ok(_dataContext.City.ToList());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message.ToString());
+            }
+        }
+
+        [HttpGet]
+        [Route("totalPage")]
+        public IActionResult TotalPage()
+        {
+            try
+            {
+                int totalPage;
+                int totalItem = _dataContext.City.Count();
+                if (totalItem % pageSize == 0) return Ok(totalItem / pageSize);
+                return Ok(totalItem / pageSize + 1);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message.ToString());
+            }
+        }
+
+        [HttpGet]
+        [Route("search/totalPage/{value}")]
+        public IActionResult SearchTotalPage(string value)
+        {
+            try
+            {
+                int totalPage;
+                int totalItem = _dataContext.City.Where(b => b.UniCodeName.ToLower().Contains(value.ToLower())).Count();
+                if (totalItem % pageSize == 0) return Ok(totalItem / pageSize);
+                return Ok(totalItem / pageSize + 1);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message.ToString());
+            }
+        }
+
+        [HttpGet]
+        [Route("page/{page}")]
+        public IActionResult GetPageCity(int page)
+        {
+            try
+            {
+                return Ok(_dataContext.City.Skip((page - 1) * pageSize).Take(pageSize).ToList());
             }
             catch (Exception ex)
             {
@@ -46,12 +99,27 @@ namespace VietTravelApi.Controllers
             }
         }
 
-        [HttpGet("search/{value}")]
-        public IActionResult SearchCity(string value)
+        //[HttpGet("search/{value}")]
+        //public IActionResult SearchCity(string value)
+        //{
+        //    try
+        //    {
+        //        List<City> cities = _dataContext.City.Where(b => b.UniCodeName.ToLower().Contains(value.ToLower())).ToList();
+        //        if (cities == null) return NotFound();
+        //        return Ok(cities);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message.ToString());
+        //    }
+        //}
+
+        [HttpGet("search/{value}/{page}")]
+        public IActionResult SearchPageTour(string value, int page)
         {
             try
             {
-                List<City> cities = _dataContext.City.Where(b => b.UniCodeName.ToLower().Contains(value.ToLower())).ToList();
+                List<City> cities = _dataContext.City.Where(b => b.UniCodeName.ToLower().Contains(value.ToLower())).Skip((page - 1) * pageSize).Take(pageSize).ToList();
                 if (cities == null) return NotFound();
                 return Ok(cities);
             }

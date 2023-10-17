@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,9 +15,13 @@ namespace VietTravelApi.Controllers
     public class TourController : ControllerBase
     {
         public DataContext _dataContext;
-        public TourController(DataContext dataContext)
+        private readonly IConfiguration _configuration;
+        public int pageSize;
+        public TourController(DataContext dataContext, IConfiguration configuration)
         {
             _dataContext = dataContext;
+            _configuration = configuration;
+            pageSize = int.Parse(_configuration["PageSize"]);
         }
 
         [HttpGet]
@@ -24,6 +30,54 @@ namespace VietTravelApi.Controllers
             try
             {
                 return Ok(_dataContext.Tour.ToList());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message.ToString());
+            }
+        }
+
+        [HttpGet]
+        [Route("totalPage")]
+        public IActionResult TotalPage()
+        {
+            try
+            {
+                int totalPage;
+                int totalItem = _dataContext.Tour.Count();
+                if (totalItem % pageSize == 0) return Ok(totalItem/pageSize);
+                return Ok(totalItem / pageSize + 1);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message.ToString());
+            }
+        }
+
+        [HttpGet]
+        [Route("search/totalPage/{value}")]
+        public IActionResult SearchTotalPage(string value)
+        {
+            try
+            {
+                int totalPage;
+                int totalItem = _dataContext.Tour.Where(b => b.UniCodeName.ToLower().Contains(value.ToLower())).Count();
+                if (totalItem % pageSize == 0) return Ok(totalItem / pageSize);
+                return Ok(totalItem / pageSize + 1);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message.ToString());
+            }
+        }
+
+        [HttpGet]
+        [Route("page/{page}")]
+        public IActionResult GetPageTour(int page)
+        {
+            try
+            {
+                return Ok(_dataContext.Tour.Skip((page-1) * pageSize).Take(pageSize).ToList());
             }
             catch (Exception ex)
             {
@@ -60,12 +114,41 @@ namespace VietTravelApi.Controllers
             }
         }
 
-        [HttpGet("search/{value}")]
-        public IActionResult SearchTour(string value)
+        [HttpGet("searchByCityId/{value}/{page}")]
+        public IActionResult SearchPageTourByCityId(string value, int page)
         {
             try
             {
-                List<Tour> tours = _dataContext.Tour.Where(b => b.UniCodeName.ToLower().Contains(value.ToLower())).ToList();
+                List<Tour> tours = _dataContext.Tour.Where(b => b.CityId == long.Parse(value)).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                return Ok(tours);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message.ToString());
+            }
+        }
+
+        //[HttpGet("search/{value}")]
+        //public IActionResult SearchTour(string value)
+        //{
+        //    try
+        //    {
+        //        List<Tour> tours = _dataContext.Tour.Where(b => b.UniCodeName.ToLower().Contains(value.ToLower())).ToList();
+        //        if (tours == null) return NotFound();
+        //        return Ok(tours);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message.ToString());
+        //    }
+        //}
+
+        [HttpGet("search/{value}/{page}")]
+        public IActionResult SearchPageTour(string value, int page)
+        {
+            try
+            {
+                List<Tour> tours = _dataContext.Tour.Where(b => b.UniCodeName.ToLower().Contains(value.ToLower())).Skip((page - 1) * pageSize).Take(pageSize).ToList();
                 if (tours == null) return NotFound();
                 return Ok(tours);
             }

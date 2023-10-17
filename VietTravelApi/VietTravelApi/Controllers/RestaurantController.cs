@@ -4,6 +4,8 @@ using System;
 using VietTravelApi.Context;
 using VietTravelApi.Models;
 using System.Linq;
+using Microsoft.Extensions.Configuration;
+using System.Configuration;
 
 namespace VietTravelApi.Controllers
 {
@@ -12,9 +14,13 @@ namespace VietTravelApi.Controllers
     public class RestaurantController : Controller
     {
         public DataContext _dataContext;
-        public RestaurantController(DataContext dataContext)
+        private readonly IConfiguration _configuration;
+        public int pageSize;
+        public RestaurantController(DataContext dataContext, IConfiguration configuration)
         {
             _dataContext = dataContext;
+            _configuration = configuration;
+            pageSize = int.Parse(_configuration["PageSize"]);
         }
 
         [HttpGet]
@@ -23,6 +29,54 @@ namespace VietTravelApi.Controllers
             try
             {
                 return Ok(_dataContext.Restaurant.ToList());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message.ToString());
+            }
+        }
+
+        [HttpGet]
+        [Route("totalPage")]
+        public IActionResult TotalPage()
+        {
+            try
+            {
+                int totalPage;
+                int totalItem = _dataContext.Restaurant.Count();
+                if (totalItem % pageSize == 0) return Ok(totalItem / pageSize);
+                return Ok(totalItem / pageSize + 1);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message.ToString());
+            }
+        }
+
+        [HttpGet]
+        [Route("search/totalPage/{value}")]
+        public IActionResult SearchTotalPage(string value)
+        {
+            try
+            {
+                int totalPage;
+                int totalItem = _dataContext.Restaurant.Where(b => b.UniCodeName.ToLower().Contains(value.ToLower())).Count();
+                if (totalItem % pageSize == 0) return Ok(totalItem / pageSize);
+                return Ok(totalItem / pageSize + 1);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message.ToString());
+            }
+        }
+
+        [HttpGet]
+        [Route("page/{page}")]
+        public IActionResult GetPageRestaurant(int page)
+        {
+            try
+            {
+                return Ok(_dataContext.Restaurant.Skip((page - 1) * pageSize).Take(pageSize).ToList());
             }
             catch (Exception ex)
             {
@@ -45,12 +99,27 @@ namespace VietTravelApi.Controllers
             }
         }
 
-        [HttpGet("search/{value}")]
-        public IActionResult SearchRestaurant(string value)
+        //[HttpGet("search/{value}")]
+        //public IActionResult SearchRestaurant(string value)
+        //{
+        //    try
+        //    {
+        //        List<Restaurant> restaurants = _dataContext.Restaurant.Where(b => b.UniCodeName.ToLower().Contains(value.ToLower())).ToList();
+        //        if (restaurants == null) return NotFound();
+        //        return Ok(restaurants);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message.ToString());
+        //    }
+        //}
+
+        [HttpGet("search/{value}/{page}")]
+        public IActionResult SearchPageRestaurant(string value, int page)
         {
             try
             {
-                List<Restaurant> restaurants = _dataContext.Restaurant.Where(b => b.UniCodeName.ToLower().Contains(value.ToLower())).ToList();
+                List<Restaurant> restaurants = _dataContext.Restaurant.Where(b => b.UniCodeName.ToLower().Contains(value.ToLower())).Skip((page - 1) * pageSize).Take(pageSize).ToList();
                 if (restaurants == null) return NotFound();
                 return Ok(restaurants);
             }
