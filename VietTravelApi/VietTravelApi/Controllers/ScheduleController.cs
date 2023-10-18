@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using VietTravelApi.Context;
 using VietTravelApi.Models;
@@ -45,6 +46,21 @@ namespace VietTravelApi.Controllers
             }
         }
 
+        [HttpGet("getByTourId/{id}")]
+        public IActionResult GetScheduleByTourId(long id)
+        {
+            try
+            {
+                List< Schedule> Schedules = _dataContext.Schedule.Where(b => b.TourId == id).ToList();
+                if (Schedules == null) return NotFound();
+                return Ok(Schedules);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message.ToString());
+            }
+        }
+
         //[HttpGet("search/{value}")]
         //public IActionResult SearchSchedule(string value)
         //{
@@ -63,12 +79,12 @@ namespace VietTravelApi.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] Schedule value)
         {
-            Schedule Schedule = value;
+            Schedule schedule = value;
             try
             {
-                _dataContext.Schedule.Add(Schedule);
+                _dataContext.Schedule.Add(schedule);
                 _dataContext.SaveChanges();
-                return Ok(Schedule);
+                return Ok(schedule);
             }
             catch (Exception ex)
             {
@@ -115,5 +131,6 @@ namespace VietTravelApi.Controllers
                 return BadRequest(ex.Message.ToString());
             }
         }
+
     }
 }

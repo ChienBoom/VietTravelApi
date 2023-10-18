@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -13,7 +14,9 @@ namespace VietTravelApi.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
         public string Name { get; set; }
+        [DataType(DataType.DateTime)]
         public DateTime StartTime { get; set; }
+        [DataType(DataType.DateTime)]
         public DateTime EndTime { get; set; }
         public string Description { get; set; }
         public int NumberOfAdult { get; set; }
@@ -24,6 +27,8 @@ namespace VietTravelApi.Models
         public long TourId { get; set; }
         public long HotelId { get; set; }
         public long TimePackageId { get; set; }
-
+        public string ListScheduleTourPackage { get; set; }
+        [NotMapped]
+        public List<ScheduleTourPackage> ScheduleTourPackages { get; set; }
     }
 }
