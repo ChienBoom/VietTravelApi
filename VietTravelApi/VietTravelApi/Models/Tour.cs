@@ -34,5 +34,8 @@ namespace VietTravelApi.Models
         public int NumberOfEvaluate { get; set; }
         public float MediumStar { get; set; }
         public string UniCodeName { get; set; }
+        public decimal PriceTourGuide { get; set; }
+        public decimal PriceBase { get; set; }
+        public decimal TotalPrice { get; set; }
     }
 }
