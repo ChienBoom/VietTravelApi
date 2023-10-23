@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using VietTravelApi.Context;
 using VietTravelApi.Models;
@@ -109,6 +110,22 @@ namespace VietTravelApi.Controllers
                     return Ok();
                 }
                 return NotFound();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message.ToString());
+            }
+        }
+
+        [HttpGet]
+        [Route("getTicketByUserId/{id}")]
+        public IActionResult GetTicketByUserId(long id)
+        {
+            try
+            {
+                List< Ticket> tickets = _dataContext.Ticket.Where(b => b.UserId == id).ToList();
+                if (tickets == null) return NotFound();
+                return Ok(tickets);
             }
             catch (Exception ex)
             {

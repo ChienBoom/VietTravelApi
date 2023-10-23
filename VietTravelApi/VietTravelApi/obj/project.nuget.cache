@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "ggvJFeA36nL+FlBmjV5TAuiNdSOpCXuPCPi00iNvw2M07iJc0bz3WoeYwoYFxQtOCXnV0SnUXkUF+aMKlRl50w==",
+  "dgSpecHash": "Hy5jwssCM17A06BMqR3l+jp2BMmPN4YznxH3TKuCNW4BGKnE4N0+DXoFBatpIuaKuqmW5zZF/BdLmnDZ7Xp19g==",
   "success": true,
-  "projectFilePath": "E:\\MyProjectPtit\\VietTravelApiNet\\VietTravelApi\\VietTravelApi\\VietTravelApi.csproj",
+  "projectFilePath": "D:\\MyProject\\VietTravelApiDev\\VietTravelApi\\VietTravelApi\\VietTravelApi.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Administrator\\.nuget\\packages\\bouncycastle.cryptography\\2.2.1\\bouncycastle.cryptography.2.2.1.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\entityframework\\6.4.4\\entityframework.6.4.4.nupkg.sha512",

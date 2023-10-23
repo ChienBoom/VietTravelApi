@@ -36,6 +36,7 @@ namespace VietTravelApi.Models
 		[Required]
 		[StringLength(50)]
 		public string Role { get; set; }
+		[NotMapped]
 		public List<Ticket> Tickets { get; set; }
         public string UniCodeName { get; set; }
     }

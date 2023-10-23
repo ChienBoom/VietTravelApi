@@ -42,10 +42,10 @@ namespace VietTravelApi.Context
             //    .HasOne(p => p.TourPackage)
             //    .WithOne(a => a.Ticket)
             //    .HasForeignKey<Ticket>(a => a.TourPackageId);
-            modelBuilder.Entity<User>()
-                .HasMany(p => p.Tickets)
-                .WithOne(a => a.User)
-                .HasForeignKey(a => a.UserId);
+            //modelBuilder.Entity<User>()
+            //    .HasMany(p => p.Tickets)
+            //    .WithOne(a => a.User)
+            //    .HasForeignKey(a => a.UserId);
         }
     }
 }
