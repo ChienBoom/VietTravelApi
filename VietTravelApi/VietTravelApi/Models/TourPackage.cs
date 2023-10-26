@@ -26,7 +26,9 @@ namespace VietTravelApi.Models
         public decimal LastPrice { get; set; }
         public long TourId { get; set; }
         public long HotelId { get; set; }
+        public long RestaurantId { get; set; }
         public long TimePackageId { get; set; }
+        public string CreateBy { get; set; }
         public string ListScheduleTourPackage { get; set; }
         [NotMapped]
         public List<ScheduleTourPackage> ScheduleTourPackages { get; set; }
