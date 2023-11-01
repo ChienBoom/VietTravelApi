@@ -19,5 +19,6 @@ namespace VietTravelApi.Models
         public decimal PriceTicketAdult { get; set; }
         public long TourId { get; set; }
         public string Pictures { get; set; }
+        public int IsDelete { get; set; } // 1 là đã xóa, 0 là chưa xóa
     }
 }

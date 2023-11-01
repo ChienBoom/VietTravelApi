@@ -23,7 +23,7 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                return Ok(_dataContext.TourPackage.ToList());
+                return Ok(_dataContext.TourPackage.Where(o => o.IsDelete == 0).ToList());
             }
             catch (Exception ex)
             {
@@ -36,7 +36,7 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                TourPackage TourPackage = _dataContext.TourPackage.FirstOrDefault(b => b.Id == id);
+                TourPackage TourPackage = _dataContext.TourPackage.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 if (TourPackage == null) return NotFound();
                 return Ok(TourPackage);
             }
@@ -51,7 +51,7 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                List<TourPackage> tourPackages = _dataContext.TourPackage.Where(b => b.TourId == long.Parse(value)).ToList();
+                List<TourPackage> tourPackages = _dataContext.TourPackage.Where(b => b.TourId == long.Parse(value) && b.IsDelete == 0).ToList();
                 return Ok(tourPackages);
             }
             catch (Exception ex)
@@ -96,7 +96,7 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                var TourPackage = _dataContext.TourPackage.FirstOrDefault(b => b.Id == id);
+                var TourPackage = _dataContext.TourPackage.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 if (TourPackage != null)
                 {
                     _dataContext.Entry(TourPackage).CurrentValues.SetValues(value);
@@ -116,10 +116,11 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                var TourPackage = _dataContext.TourPackage.FirstOrDefault(b => b.Id == id);
+                var TourPackage = _dataContext.TourPackage.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 if (TourPackage != null)
                 {
-                    _dataContext.Remove(TourPackage);
+                    //_dataContext.Remove(TourPackage);
+                    TourPackage.IsDelete = 1;
                     _dataContext.SaveChanges();
                     return Ok();
                 }

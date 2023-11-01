@@ -23,7 +23,7 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                return Ok(_dataContext.Ticket.ToList());
+                return Ok(_dataContext.Ticket.Where(o => o.IsDelete == 0).ToList());
             }
             catch (Exception ex)
             {
@@ -36,7 +36,7 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                Ticket Ticket = _dataContext.Ticket.FirstOrDefault(b => b.Id == id);
+                Ticket Ticket = _dataContext.Ticket.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 if (Ticket == null) return NotFound();
                 return Ok(Ticket);
             }
@@ -82,7 +82,7 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                var Ticket = _dataContext.Ticket.FirstOrDefault(b => b.Id == id);
+                var Ticket = _dataContext.Ticket.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 if (Ticket != null)
                 {
                     _dataContext.Entry(Ticket).CurrentValues.SetValues(value);
@@ -102,10 +102,11 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                var Ticket = _dataContext.Ticket.FirstOrDefault(b => b.Id == id);
+                var Ticket = _dataContext.Ticket.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 if (Ticket != null)
                 {
-                    _dataContext.Remove(Ticket);
+                    //_dataContext.Remove(Ticket);
+                    Ticket.IsDelete = 1;
                     _dataContext.SaveChanges();
                     return Ok();
                 }
@@ -123,7 +124,7 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                List< Ticket> tickets = _dataContext.Ticket.Where(b => b.UserId == id).ToList();
+                List< Ticket> tickets = _dataContext.Ticket.Where(b => b.UserId == id && b.IsDelete == 0).ToList();
                 if (tickets == null) return NotFound();
                 return Ok(tickets);
             }

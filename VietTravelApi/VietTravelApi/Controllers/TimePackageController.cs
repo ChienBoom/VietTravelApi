@@ -22,7 +22,7 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                return Ok(_dataContext.TimePackage.ToList());
+                return Ok(_dataContext.TimePackage.Where(o => o.IsDelete == 0).ToList());
             }
             catch (Exception ex)
             {
@@ -35,7 +35,7 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                TimePackage TimePackage = _dataContext.TimePackage.FirstOrDefault(b => b.Id == id);
+                TimePackage TimePackage = _dataContext.TimePackage.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 if (TimePackage == null) return NotFound();
                 return Ok(TimePackage);
             }
@@ -81,7 +81,7 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                var TimePackage = _dataContext.TimePackage.FirstOrDefault(b => b.Id == id);
+                var TimePackage = _dataContext.TimePackage.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 if (TimePackage != null)
                 {
                     _dataContext.Entry(TimePackage).CurrentValues.SetValues(value);
@@ -101,10 +101,11 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                var TimePackage = _dataContext.TimePackage.FirstOrDefault(b => b.Id == id);
+                var TimePackage = _dataContext.TimePackage.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 if (TimePackage != null)
                 {
-                    _dataContext.Remove(TimePackage);
+                    //_dataContext.Remove(TimePackage);
+                    TimePackage.IsDelete = 1;
                     _dataContext.SaveChanges();
                     return Ok();
                 }

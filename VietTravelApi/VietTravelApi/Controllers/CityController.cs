@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using VietTravelApi.Common;
 using VietTravelApi.Context;
 using VietTravelApi.Models;
 
@@ -14,12 +15,14 @@ namespace VietTravelApi.Controllers
     public class CityController : ControllerBase
     {
         public DataContext _dataContext;
+        public DeleteModels _deleteModels;
         private readonly IConfiguration _configuration;
         public int pageSize;
-        public CityController(DataContext dataContext, IConfiguration configuration)
+        public CityController(DataContext dataContext, IConfiguration configuration, DeleteModels deleteModels)
         {
             _dataContext = dataContext;
             _configuration = configuration;
+            _deleteModels = deleteModels;
             pageSize = int.Parse(_configuration["PageSize"]);
         }
 
@@ -28,7 +31,7 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                return Ok(_dataContext.City.ToList());
+                return Ok(_dataContext.City.Where(o => o.IsDelete == 0).ToList());
             }
             catch (Exception ex)
             {
@@ -43,7 +46,7 @@ namespace VietTravelApi.Controllers
             try
             {
                 int totalPage;
-                int totalItem = _dataContext.City.Count();
+                int totalItem = _dataContext.City.Where(o => o.IsDelete == 0).Count();
                 if (totalItem % pageSize == 0) return Ok(totalItem / pageSize);
                 return Ok(totalItem / pageSize + 1);
             }
@@ -60,7 +63,7 @@ namespace VietTravelApi.Controllers
             try
             {
                 int totalPage;
-                int totalItem = _dataContext.City.Where(b => b.UniCodeName.ToLower().Contains(value.ToLower())).Count();
+                int totalItem = _dataContext.City.Where(b => b.UniCodeName.ToLower().Contains(value.ToLower()) && b.IsDelete == 0).Count();
                 if (totalItem % pageSize == 0) return Ok(totalItem / pageSize);
                 return Ok(totalItem / pageSize + 1);
             }
@@ -76,7 +79,7 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                return Ok(_dataContext.City.Skip((page - 1) * pageSize).Take(pageSize).ToList());
+                return Ok(_dataContext.City.Where(o => o.IsDelete == 0).Skip((page - 1) * pageSize).Take(pageSize).ToList());
             }
             catch (Exception ex)
             {
@@ -89,7 +92,7 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                City city = _dataContext.City.FirstOrDefault(b => b.Id == id);
+                City city = _dataContext.City.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 if (city == null) return NotFound();
                 return Ok(city);
             }
@@ -119,7 +122,7 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                List<City> cities = _dataContext.City.Where(b => b.UniCodeName.ToLower().Contains(value.ToLower())).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                List<City> cities = _dataContext.City.Where(b => b.UniCodeName.ToLower().Contains(value.ToLower()) && b.IsDelete == 0).Skip((page - 1) * pageSize).Take(pageSize).ToList();
                 if (cities == null) return NotFound();
                 return Ok(cities);
             }
@@ -150,7 +153,7 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                var City = _dataContext.City.FirstOrDefault(b => b.Id == id);
+                var City = _dataContext.City.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 if (City != null)
                 {
                     if(value.Pictures.Equals("File null")) value.Pictures = City.Pictures;
@@ -172,10 +175,12 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                var City = _dataContext.City.FirstOrDefault(b => b.Id == id);
+                var City = _dataContext.City.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 if (City != null)
                 {
-                    _dataContext.Remove(City);
+                    //_dataContext.Remove(City);
+                    City.IsDelete = 1;
+                    _deleteModels.DeleteCity(id);
                     _dataContext.SaveChanges();
                     return Ok();
                 }

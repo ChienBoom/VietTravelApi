@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using VietTravelApi.Common;
 using VietTravelApi.Context;
 using VietTravelApi.Models;
 
@@ -15,11 +16,13 @@ namespace VietTravelApi.Controllers
     {
         public DataContext _dataContext;
         private readonly IConfiguration _configuration;
+        public DeleteModels _deleteModels;
         public int pageSize;
-        public HotelController(DataContext dataContext, IConfiguration configuration)
+        public HotelController(DataContext dataContext, IConfiguration configuration, DeleteModels deleteModels)
         {
             _dataContext = dataContext;
             _configuration = configuration;
+            _deleteModels =deleteModels;
             pageSize = int.Parse(_configuration["PageSize"]);
         }
 
@@ -28,7 +31,7 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                return Ok(_dataContext.Hotel.ToList());
+                return Ok(_dataContext.Hotel.Where(o => o.IsDelete == 0).ToList());
             }
             catch (Exception ex)
             {
@@ -43,7 +46,7 @@ namespace VietTravelApi.Controllers
             try
             {
                 int totalPage;
-                int totalItem = _dataContext.Hotel.Count();
+                int totalItem = _dataContext.Hotel.Where(o => o.IsDelete == 0).Count();
                 if (totalItem % pageSize == 0) return Ok(totalItem / pageSize);
                 return Ok(totalItem / pageSize + 1);
             }
@@ -60,7 +63,7 @@ namespace VietTravelApi.Controllers
             try
             {
                 int totalPage;
-                int totalItem = _dataContext.Hotel.Where(b => b.UniCodeName.ToLower().Contains(value.ToLower())).Count();
+                int totalItem = _dataContext.Hotel.Where(b => b.UniCodeName.ToLower().Contains(value.ToLower()) && b.IsDelete == 0).Count();
                 if (totalItem % pageSize == 0) return Ok(totalItem / pageSize);
                 return Ok(totalItem / pageSize + 1);
             }
@@ -76,7 +79,7 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                return Ok(_dataContext.Hotel.Skip((page - 1) * pageSize).Take(pageSize).ToList());
+                return Ok(_dataContext.Hotel.Where(o => o.IsDelete == 0).Skip((page - 1) * pageSize).Take(pageSize).ToList());
             }
             catch (Exception ex)
             {
@@ -89,7 +92,7 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                Hotel Hotel = _dataContext.Hotel.FirstOrDefault(b => b.Id == id);
+                Hotel Hotel = _dataContext.Hotel.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 if (Hotel == null) return NotFound();
                 return Ok(Hotel);
             }
@@ -119,7 +122,7 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                List<Hotel> hotels = _dataContext.Hotel.Where(b => b.UniCodeName.ToLower().Contains(value.ToLower())).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                List<Hotel> hotels = _dataContext.Hotel.Where(b => b.UniCodeName.ToLower().Contains(value.ToLower()) && b.IsDelete == 0).Skip((page - 1) * pageSize).Take(pageSize).ToList();
                 if (hotels == null) return NotFound();
                 return Ok(hotels);
             }
@@ -134,7 +137,7 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                List<Hotel> hotels = _dataContext.Hotel.Where(b => b.CityId == long.Parse(value)).ToList();
+                List<Hotel> hotels = _dataContext.Hotel.Where(b => b.CityId == long.Parse(value) && b.IsDelete == 0).ToList();
                 return Ok(hotels);
             }
             catch (Exception ex)
@@ -164,7 +167,7 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                var Hotel = _dataContext.Hotel.FirstOrDefault(b => b.Id == id);
+                var Hotel = _dataContext.Hotel.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 if (Hotel != null)
                 {
                     if (value.Pictures.Equals("File null")) value.Pictures = Hotel.Pictures;
@@ -185,10 +188,12 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                var Hotel = _dataContext.Hotel.FirstOrDefault(b => b.Id == id);
+                var Hotel = _dataContext.Hotel.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 if (Hotel != null)
                 {
-                    _dataContext.Remove(Hotel);
+                    //_dataContext.Remove(Hotel);
+                    Hotel.IsDelete = 1;
+                    _deleteModels.DeleteHotel(id);
                     _dataContext.SaveChanges();
                     return Ok();
                 }

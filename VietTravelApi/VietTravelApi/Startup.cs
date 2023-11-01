@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using VietTravelApi.Common;
 using VietTravelApi.Context;
 using VietTravelApi.Models;
 using VietTravelApi.Service;
@@ -40,6 +41,7 @@ namespace VietTravelApi
             var mailsettings = Configuration.GetSection("MailSettings");
             services.Configure<MailSettings>(mailsettings);
             services.AddTransient<ISendMailService, SendMailService>();
+            services.AddTransient<DeleteModels>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

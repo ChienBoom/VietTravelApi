@@ -51,13 +51,13 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                List< Evaluate> evaluates = _dataContext.Evaluate.Where(b => b.EvaId == value && b.Eva == 1).ToList();
+                List< Evaluate> evaluates = _dataContext.Evaluate.Where(b => b.EvaId == value && b.Eva == 1 && b.IsDelete == 0).ToList();
                 if (evaluates == null) return NotFound();
                 else
                 {
                     foreach(Evaluate eva in evaluates)
                     {
-                        User user = _dataContext.User.FirstOrDefault(b => b.Id == eva.UserId);
+                        User user = _dataContext.User.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == eva.UserId);
                         if(user == null) return NotFound();
                         eva.User = user;
                     }
@@ -75,13 +75,13 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                List<Evaluate> evaluates = _dataContext.Evaluate.Where(b => b.EvaId == value && b.Eva == 2).ToList();
+                List<Evaluate> evaluates = _dataContext.Evaluate.Where(b => b.EvaId == value && b.Eva == 2 && b.IsDelete == 0).ToList();
                 if (evaluates == null) return NotFound();
                 else
                 {
                     foreach (Evaluate eva in evaluates)
                     {
-                        User user = _dataContext.User.FirstOrDefault(b => b.Id == eva.UserId);
+                        User user = _dataContext.User.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == eva.UserId);
                         if (user == null) return NotFound();
                         eva.User = user;
                     }
@@ -99,13 +99,13 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                List<Evaluate> evaluates = _dataContext.Evaluate.Where(b => b.EvaId == value && b.Eva == 3).ToList();
+                List<Evaluate> evaluates = _dataContext.Evaluate.Where(b => b.EvaId == value && b.Eva == 3 && b.IsDelete == 0).ToList();
                 if (evaluates == null) return NotFound();
                 else
                 {
                     foreach (Evaluate eva in evaluates)
                     {
-                        User user = _dataContext.User.FirstOrDefault(b => b.Id == eva.UserId);
+                        User user = _dataContext.User.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == eva.UserId);
                         if (user == null) return NotFound();
                         eva.User = user;
                     }
@@ -123,13 +123,13 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                List<Evaluate> evaluates = _dataContext.Evaluate.Where(b => b.EvaId == value && b.Eva == 4).ToList();
+                List<Evaluate> evaluates = _dataContext.Evaluate.Where(b => b.EvaId == value && b.Eva == 4 && b.IsDelete == 0).ToList();
                 if (evaluates == null) return NotFound();
                 else
                 {
                     foreach (Evaluate eva in evaluates)
                     {
-                        User user = _dataContext.User.FirstOrDefault(b => b.Id == eva.UserId);
+                        User user = _dataContext.User.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == eva.UserId);
                         if (user == null) return NotFound();
                         eva.User = user;
                     }
@@ -163,7 +163,7 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                var evaluate = _dataContext.Evaluate.FirstOrDefault(b => b.Id == id);
+                var evaluate = _dataContext.Evaluate.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 if (evaluate != null)
                 {
                     _dataContext.Entry(evaluate).CurrentValues.SetValues(value);
@@ -183,10 +183,11 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                var evaluate = _dataContext.Evaluate.FirstOrDefault(b => b.Id == id);
+                var evaluate = _dataContext.Evaluate.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 if (evaluate != null)
                 {
-                    _dataContext.Remove(evaluate);
+                    //_dataContext.Remove(evaluate);
+                    evaluate.IsDelete = 1;
                     _dataContext.SaveChanges();
                     return Ok();
                 }

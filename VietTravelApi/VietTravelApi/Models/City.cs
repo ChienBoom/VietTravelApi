@@ -28,6 +28,7 @@ namespace VietTravelApi.Models
         public string ContentIntroduct { get; set; }
 		public List<Tour> Tours { get; set; }
 		public string UniCodeName { get; set; }
+		public int IsDelete { get; set; } // 1 là đã xóa, 0 là chưa xóa
 
 	}
 }

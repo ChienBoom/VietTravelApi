@@ -6,6 +6,7 @@ using VietTravelApi.Models;
 using System.Linq;
 using Microsoft.Extensions.Configuration;
 using System.Configuration;
+using VietTravelApi.Common;
 
 namespace VietTravelApi.Controllers
 {
@@ -15,11 +16,13 @@ namespace VietTravelApi.Controllers
     {
         public DataContext _dataContext;
         private readonly IConfiguration _configuration;
+        public DeleteModels _deleteModels;
         public int pageSize;
-        public RestaurantController(DataContext dataContext, IConfiguration configuration)
+        public RestaurantController(DataContext dataContext, IConfiguration configuration, DeleteModels deleteModels)
         {
             _dataContext = dataContext;
             _configuration = configuration;
+            _deleteModels = deleteModels;
             pageSize = int.Parse(_configuration["PageSize"]);
         }
 
@@ -28,7 +31,7 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                return Ok(_dataContext.Restaurant.ToList());
+                return Ok(_dataContext.Restaurant.Where(o => o.IsDelete == 0).ToList());
             }
             catch (Exception ex)
             {
@@ -43,7 +46,7 @@ namespace VietTravelApi.Controllers
             try
             {
                 int totalPage;
-                int totalItem = _dataContext.Restaurant.Count();
+                int totalItem = _dataContext.Restaurant.Where(o => o.IsDelete == 0).Count();
                 if (totalItem % pageSize == 0) return Ok(totalItem / pageSize);
                 return Ok(totalItem / pageSize + 1);
             }
@@ -60,7 +63,7 @@ namespace VietTravelApi.Controllers
             try
             {
                 int totalPage;
-                int totalItem = _dataContext.Restaurant.Where(b => b.UniCodeName.ToLower().Contains(value.ToLower())).Count();
+                int totalItem = _dataContext.Restaurant.Where(b => b.UniCodeName.ToLower().Contains(value.ToLower()) && b.IsDelete == 0).Count();
                 if (totalItem % pageSize == 0) return Ok(totalItem / pageSize);
                 return Ok(totalItem / pageSize + 1);
             }
@@ -76,7 +79,7 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                return Ok(_dataContext.Restaurant.Skip((page - 1) * pageSize).Take(pageSize).ToList());
+                return Ok(_dataContext.Restaurant.Where(o => o.IsDelete == 0).Skip((page - 1) * pageSize).Take(pageSize).ToList());
             }
             catch (Exception ex)
             {
@@ -89,7 +92,7 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                Restaurant restaurant = _dataContext.Restaurant.FirstOrDefault(b => b.Id == id);
+                Restaurant restaurant = _dataContext.Restaurant.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 if (restaurant == null) return NotFound();
                 return Ok(restaurant);
             }
@@ -119,7 +122,7 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                List<Restaurant> restaurants = _dataContext.Restaurant.Where(b => b.UniCodeName.ToLower().Contains(value.ToLower())).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                List<Restaurant> restaurants = _dataContext.Restaurant.Where(b => b.UniCodeName.ToLower().Contains(value.ToLower()) && b.IsDelete == 0).Skip((page - 1) * pageSize).Take(pageSize).ToList();
                 if (restaurants == null) return NotFound();
                 return Ok(restaurants);
             }
@@ -134,7 +137,7 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                List<Restaurant> restaurants = _dataContext.Restaurant.Where(b => b.CityId == long.Parse(value)).ToList();
+                List<Restaurant> restaurants = _dataContext.Restaurant.Where(b => b.CityId == long.Parse(value) && b.IsDelete == 0).ToList();
                 return Ok(restaurants);
             }
             catch (Exception ex)
@@ -164,7 +167,7 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                var restaurant = _dataContext.Restaurant.FirstOrDefault(b => b.Id == id);
+                var restaurant = _dataContext.Restaurant.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 if (restaurant != null)
                 {
                     if (value.Pictures.Equals("File null")) value.Pictures = restaurant.Pictures;
@@ -185,10 +188,12 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                var restaurant = _dataContext.Restaurant.FirstOrDefault(b => b.Id == id);
+                var restaurant = _dataContext.Restaurant.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 if (restaurant != null)
                 {
-                    _dataContext.Remove(restaurant);
+                    //_dataContext.Remove(restaurant);
+                    restaurant.IsDelete = 1;
+                    _deleteModels.DeleteRestaurant(id);
                     _dataContext.SaveChanges();
                     return Ok();
                 }

@@ -23,7 +23,7 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                return Ok(_dataContext.TourGuide.ToList());
+                return Ok(_dataContext.TourGuide.Where(o => o.IsDelete == 0).ToList());
             }
             catch (Exception ex)
             {
@@ -36,7 +36,7 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                TourGuide TourGuide = _dataContext.TourGuide.FirstOrDefault(b => b.Id == id);
+                TourGuide TourGuide = _dataContext.TourGuide.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 if (TourGuide == null) return NotFound();
                 return Ok(TourGuide);
             }
@@ -51,7 +51,7 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                List<TourGuide> tourGuides = _dataContext.TourGuide.Where(b => b.CityId == long.Parse(value)).ToList();
+                List<TourGuide> tourGuides = _dataContext.TourGuide.Where(b => b.CityId == long.Parse(value) && b.IsDelete == 0).ToList();
                 return Ok(tourGuides);
             }
             catch (Exception ex)
@@ -96,7 +96,7 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                var TourGuide = _dataContext.TourGuide.FirstOrDefault(b => b.Id == id);
+                var TourGuide = _dataContext.TourGuide.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 if (TourGuide != null)
                 {
                     _dataContext.Entry(TourGuide).CurrentValues.SetValues(value);
@@ -116,10 +116,11 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                var TourGuide = _dataContext.TourGuide.FirstOrDefault(b => b.Id == id);
+                var TourGuide = _dataContext.TourGuide.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 if (TourGuide != null)
                 {
-                    _dataContext.Remove(TourGuide);
+                    //_dataContext.Remove(TourGuide);
+                    TourGuide.IsDelete = 1;
                     _dataContext.SaveChanges();
                     return Ok();
                 }

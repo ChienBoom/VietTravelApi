@@ -23,7 +23,7 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                return Ok(_dataContext.Event.ToList());
+                return Ok(_dataContext.Event.Where(o => o.IsDelete == 0).ToList());
             }
             catch (Exception ex)
             {
@@ -36,7 +36,7 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                Event Event = _dataContext.Event.FirstOrDefault(b => b.Id == id);
+                Event Event = _dataContext.Event.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 if (Event == null) return NotFound();
                 return Ok(Event);
             }
@@ -51,7 +51,7 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                List<Event> events = _dataContext.Event.Where(b => b.TourId == long.Parse(value)).ToList();
+                List<Event> events = _dataContext.Event.Where(b => b.TourId == long.Parse(value) && b.IsDelete == 0).ToList();
                 if (events == null) return NotFound();
                 return Ok(events);
             }
@@ -82,7 +82,7 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                var Event = _dataContext.Event.FirstOrDefault(b => b.Id == id);
+                var Event = _dataContext.Event.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 if (Event != null)
                 {
                     if (value.Pictures.Equals("File null")) value.Pictures = Event.Pictures;
@@ -103,10 +103,11 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                var Event = _dataContext.Event.FirstOrDefault(b => b.Id == id);
+                var Event = _dataContext.Event.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 if (Event != null)
                 {
-                    _dataContext.Remove(Event);
+                    //_dataContext.Remove(Event);
+                    Event.IsDelete = 1;
                     _dataContext.SaveChanges();
                     return Ok();
                 }

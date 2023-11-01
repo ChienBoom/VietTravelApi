@@ -4,6 +4,7 @@ using Org.BouncyCastle.Asn1.Ocsp;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using VietTravelApi.Common;
 using VietTravelApi.Context;
 using VietTravelApi.Models;
 using VietTravelApi.Service;
@@ -16,10 +17,12 @@ namespace VietTravelApi.Controllers
     {
         public DataContext _dataContext;
         private readonly ISendMailService _sendMailService;
-        public UserController(DataContext dataContext, ISendMailService sendMailService)
+        public DeleteModels _deleteModels;
+        public UserController(DataContext dataContext, ISendMailService sendMailService, DeleteModels deleteModels)
         {
             _dataContext = dataContext;
             _sendMailService = sendMailService;
+            _deleteModels = deleteModels;
         }
 
         [HttpGet]
@@ -27,7 +30,7 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                return Ok(_dataContext.User.ToList());
+                return Ok(_dataContext.User.Where(o => o.IsDelete == 0).ToList());
             }
             catch (Exception ex)
             {
@@ -40,7 +43,7 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                User User = _dataContext.User.FirstOrDefault(b => b.Id == id);
+                User User = _dataContext.User.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 if (User == null) return NotFound();
                 return Ok(User);
             }
@@ -55,7 +58,7 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                User User = _dataContext.User.FirstOrDefault(b => b.Username == username);
+                User User = _dataContext.User.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Username == username);
                 if (User == null) return NotFound();
                 return Ok(User);
             }
@@ -86,7 +89,7 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                var User = _dataContext.User.FirstOrDefault(b => b.Id == id);
+                var User = _dataContext.User.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 if (User != null)
                 {
                     _dataContext.Entry(User).CurrentValues.SetValues(value);
@@ -106,10 +109,12 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                var User = _dataContext.User.FirstOrDefault(b => b.Id == id);
+                var User = _dataContext.User.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 if (User != null)
                 {
-                    _dataContext.Remove(User);
+                    //_dataContext.Remove(User);
+                    User.IsDelete = 1;
+                    _deleteModels.DeleteUser(id);
                     _dataContext.SaveChanges();
                     return Ok();
                 }
@@ -126,7 +131,7 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                var User = _dataContext.User.FirstOrDefault(b => b.Username == value.Username);
+                var User = _dataContext.User.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Username == value.Username);
                 if (User != null)
                 {
                     return Ok(value);
@@ -147,7 +152,7 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                var User = _dataContext.User.FirstOrDefault(b => b.Username == value.Username);
+                var User = _dataContext.User.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Username == value.Username);
                 if (User != null)
                 {
                     if (value.Password == User.Password)
@@ -175,7 +180,7 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                var User = _dataContext.User.FirstOrDefault(b => b.Username == value.Username);
+                var User = _dataContext.User.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Username == value.Username);
                 if (User != null)
                 {
                     MailContent content = new MailContent

@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using VietTravelApi.Common;
 using VietTravelApi.Context;
 using VietTravelApi.Models;
 
@@ -16,11 +17,13 @@ namespace VietTravelApi.Controllers
     {
         public DataContext _dataContext;
         private readonly IConfiguration _configuration;
+        public DeleteModels _deleteModels;
         public int pageSize;
-        public TourController(DataContext dataContext, IConfiguration configuration)
+        public TourController(DataContext dataContext, IConfiguration configuration, DeleteModels deleteModels)
         {
             _dataContext = dataContext;
             _configuration = configuration;
+            _deleteModels = deleteModels;
             pageSize = int.Parse(_configuration["PageSize"]);
         }
 
@@ -29,7 +32,7 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                return Ok(_dataContext.Tour.ToList());
+                return Ok(_dataContext.Tour.Where(o => o.IsDelete == 0).ToList());
             }
             catch (Exception ex)
             {
@@ -44,7 +47,7 @@ namespace VietTravelApi.Controllers
             try
             {
                 int totalPage;
-                int totalItem = _dataContext.Tour.Count();
+                int totalItem = _dataContext.Tour.Where(o => o.IsDelete == 0).Count();
                 if (totalItem % pageSize == 0) return Ok(totalItem/pageSize);
                 return Ok(totalItem / pageSize + 1);
             }
@@ -61,7 +64,7 @@ namespace VietTravelApi.Controllers
             try
             {
                 int totalPage;
-                int totalItem = _dataContext.Tour.Where(b => b.UniCodeName.ToLower().Contains(value.ToLower())).Count();
+                int totalItem = _dataContext.Tour.Where(b => b.UniCodeName.ToLower().Contains(value.ToLower()) && b.IsDelete == 0).Count();
                 if (totalItem % pageSize == 0) return Ok(totalItem / pageSize);
                 return Ok(totalItem / pageSize + 1);
             }
@@ -77,7 +80,7 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                return Ok(_dataContext.Tour.Skip((page-1) * pageSize).Take(pageSize).ToList());
+                return Ok(_dataContext.Tour.Where(o => o.IsDelete == 0).Skip((page-1) * pageSize).Take(pageSize).ToList());
             }
             catch (Exception ex)
             {
@@ -90,7 +93,7 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                Tour Tour = _dataContext.Tour.FirstOrDefault(b => b.Id == id);
+                Tour Tour = _dataContext.Tour.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 if (Tour == null) return NotFound();
                 return Ok(Tour);
             }
@@ -105,7 +108,7 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                List<Tour> tours = _dataContext.Tour.Where(b => b.CityId == long.Parse(value)).ToList();
+                List<Tour> tours = _dataContext.Tour.Where(b => b.CityId == long.Parse(value) && b.IsDelete == 0).ToList();
                 return Ok(tours);
             }
             catch (Exception ex)
@@ -119,7 +122,7 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                List<Tour> tours = _dataContext.Tour.Where(b => b.CityId == long.Parse(value)).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                List<Tour> tours = _dataContext.Tour.Where(b => b.CityId == long.Parse(value) && b.IsDelete == 0).Skip((page - 1) * pageSize).Take(pageSize).ToList();
                 return Ok(tours);
             }
             catch (Exception ex)
@@ -148,7 +151,7 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                List<Tour> tours = _dataContext.Tour.Where(b => b.UniCodeName.ToLower().Contains(value.ToLower())).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                List<Tour> tours = _dataContext.Tour.Where(b => b.UniCodeName.ToLower().Contains(value.ToLower()) && b.IsDelete == 0).Skip((page - 1) * pageSize).Take(pageSize).ToList();
                 if (tours == null) return NotFound();
                 return Ok(tours);
             }
@@ -179,7 +182,7 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                var tour = _dataContext.Tour.FirstOrDefault(b => b.Id == id);
+                var tour = _dataContext.Tour.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 if (tour != null)
                 {
                     _dataContext.Entry(tour).CurrentValues.SetValues(value);
@@ -199,10 +202,12 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                var tour = _dataContext.Tour.FirstOrDefault(b => b.Id == id);
+                var tour = _dataContext.Tour.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 if (tour != null)
                 {
-                    _dataContext.Remove(tour);
+                    //_dataContext.Remove(tour);
+                    tour.IsDelete = 1;
+                    _deleteModels.DeleteTour(id);
                     _dataContext.SaveChanges();
                     return Ok();
                 }

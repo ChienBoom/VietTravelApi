@@ -28,6 +28,7 @@ namespace VietTravelApi.Models
         public string Address { get; set; }
         [Required]
         public long CityId { get; set; }
+        public int IsDelete { get; set; } // 1 là đã xóa, 0 là chưa xóa
 
     }
 }

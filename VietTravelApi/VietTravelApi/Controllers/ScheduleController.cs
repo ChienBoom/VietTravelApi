@@ -23,7 +23,7 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                return Ok(_dataContext.Schedule.ToList());
+                return Ok(_dataContext.Schedule.Where(o => o.IsDelete == 0).ToList());
             }
             catch (Exception ex)
             {
@@ -36,7 +36,7 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                Schedule Schedule = _dataContext.Schedule.FirstOrDefault(b => b.Id == id);
+                Schedule Schedule = _dataContext.Schedule.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 if (Schedule == null) return NotFound();
                 return Ok(Schedule);
             }
@@ -51,7 +51,7 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                List< Schedule> Schedules = _dataContext.Schedule.Where(b => b.TourId == id).ToList();
+                List< Schedule> Schedules = _dataContext.Schedule.Where(b => b.TourId == id && b.IsDelete == 0).ToList();
                 if (Schedules == null) return NotFound();
                 return Ok(Schedules);
             }
@@ -97,7 +97,7 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                var Schedule = _dataContext.Schedule.FirstOrDefault(b => b.Id == id);
+                var Schedule = _dataContext.Schedule.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 if (Schedule != null)
                 {
                     _dataContext.Entry(Schedule).CurrentValues.SetValues(value);
@@ -117,10 +117,11 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                var Schedule = _dataContext.Schedule.FirstOrDefault(b => b.Id == id);
+                var Schedule = _dataContext.Schedule.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 if (Schedule != null)
                 {
-                    _dataContext.Remove(Schedule);
+                    //_dataContext.Remove(Schedule);
+                    Schedule.IsDelete = 1;
                     _dataContext.SaveChanges();
                     return Ok();
                 }
