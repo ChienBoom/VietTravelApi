@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -75,6 +76,23 @@ namespace VietTravelApi.Controllers
         }
 
         [HttpGet]
+        [Route("searchByCityId/totalPage/{value}")]
+        public IActionResult SearchTotalPageByCityId(string value)
+        {
+            try
+            {
+                int totalPage;
+                int totalItem = _dataContext.Tour.Where(b => b.CityId == long.Parse(value) && b.IsDelete == 0).Count();
+                if (totalItem % pageSize == 0) return Ok(totalItem / pageSize);
+                return Ok(totalItem / pageSize + 1);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message.ToString());
+            }
+        }
+
+        [HttpGet]
         [Route("page/{page}")]
         public IActionResult GetPageTour(int page)
         {
@@ -87,6 +105,21 @@ namespace VietTravelApi.Controllers
                 return BadRequest(ex.Message.ToString());
             }
         }
+
+        //[HttpGet]
+        //[Route("hotTour")]
+        //public IActionResult HotTour()
+        //{
+        //    try
+        //    {
+        //        List<Tour> tours = _dataContext.Tour.OrderByDescending(o => o.MediumStar).ToList();
+        //        return Ok();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message.ToString());
+        //    }
+        //}
 
         [HttpGet("{id}")]
         public IActionResult GetTourById(long id)
