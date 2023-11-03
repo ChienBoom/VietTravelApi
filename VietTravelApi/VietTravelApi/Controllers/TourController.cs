@@ -93,6 +93,23 @@ namespace VietTravelApi.Controllers
         }
 
         [HttpGet]
+        [Route("searchRelatedTour/{value}")]
+        public IActionResult SearchRelatedTour(string value)
+        {
+            try
+            {
+                Tour tour = _dataContext.Tour.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == long.Parse(value));
+                if (tour == null) return NotFound();
+                List <Tour> tours = _dataContext.Tour.Where(o => o.IsDelete == 0 && o.CityId == tour.CityId && o.Id != tour.Id).ToList();
+                return Ok(tours);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message.ToString());
+            }
+        }
+
+        [HttpGet]
         [Route("page/{page}")]
         public IActionResult GetPageTour(int page)
         {
@@ -218,6 +235,7 @@ namespace VietTravelApi.Controllers
                 var tour = _dataContext.Tour.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 if (tour != null)
                 {
+                    if (value.Pictures.Equals("File null")) value.Pictures = tour.Pictures;
                     _dataContext.Entry(tour).CurrentValues.SetValues(value);
                     _dataContext.SaveChanges();
                     return Ok(value);

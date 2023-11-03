@@ -31,7 +31,7 @@ namespace VietTravelApi.Controllers
                 Revenue revenue = new Revenue();
                 List<string> Labels = new List<string>();
                 List<List<Ticket>> Data = new List<List<Ticket>>();
-                List<City> cities = _dataContext.City.ToList();
+                List<City> cities = _dataContext.City.Where(o => o.IsDelete==0).ToList();
                 if (cities.Count > 0)
                 {
                     foreach (City item in cities)
@@ -41,7 +41,7 @@ namespace VietTravelApi.Controllers
                                        join tourPackage in _dataContext.TourPackage on ticket.TourPackageId equals tourPackage.Id
                                        join tour in _dataContext.Tour on tourPackage.TourId equals tour.Id
                                        join city in _dataContext.City on tour.CityId equals city.Id
-                                       where city.Id == item.Id
+                                       where city.Id == item.Id && tour.IsDelete ==0 && ticket.IsDelete ==0
                                        select new
                                        {
                                            ticket,
@@ -88,7 +88,7 @@ namespace VietTravelApi.Controllers
                 Revenue revenue = new Revenue();
                 List<string> Labels = new List<string>();
                 List<List<Ticket>> Data = new List<List<Ticket>>();
-                List<Tour> tours = _dataContext.Tour.ToList();
+                List<Tour> tours = _dataContext.Tour.Where(o => o.IsDelete==0).ToList();
                 if (tours.Count > 0)
                 {
                     foreach (Tour item in tours)
@@ -97,7 +97,7 @@ namespace VietTravelApi.Controllers
                         var tickets = (from ticket in _dataContext.Ticket
                                        join tourPackage in _dataContext.TourPackage on ticket.TourPackageId equals tourPackage.Id
                                        join tour in _dataContext.Tour on tourPackage.TourId equals tour.Id
-                                       where tour.Id == item.Id
+                                       where tour.Id == item.Id && ticket.IsDelete == 0
                                        select new
                                        {
                                            ticket,
@@ -149,7 +149,7 @@ namespace VietTravelApi.Controllers
                     Labels.Add("Tháng " + i.ToString());
                     var tickets = (from ticket in _dataContext.Ticket
                                    join tourPackage in _dataContext.TourPackage on ticket.TourPackageId equals tourPackage.Id
-                                   where ticket.BookingDate.Month == i
+                                   where ticket.BookingDate.Month == i && ticket.IsDelete == 0
                                    select new
                                    {
                                        ticket,

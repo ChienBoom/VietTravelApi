@@ -46,7 +46,7 @@ namespace VietTravelApi.Controllers
             }
         }
 
-        [HttpGet("searchEvent/{value}")]
+        [HttpGet("searchEventByTourId/{value}")]
         public IActionResult SearchEventByTourId(string value)
         {
             try
