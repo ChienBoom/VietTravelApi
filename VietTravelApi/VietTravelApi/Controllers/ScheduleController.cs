@@ -100,6 +100,7 @@ namespace VietTravelApi.Controllers
                 var Schedule = _dataContext.Schedule.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 if (Schedule != null)
                 {
+                    if (value.Pictures.Equals("File null")) value.Pictures = Schedule.Pictures;
                     _dataContext.Entry(Schedule).CurrentValues.SetValues(value);
                     _dataContext.SaveChanges();
                     return Ok(value);

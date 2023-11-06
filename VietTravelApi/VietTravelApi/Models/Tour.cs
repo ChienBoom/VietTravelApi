@@ -17,11 +17,6 @@ namespace VietTravelApi.Models
 		[StringLength(100)]
 		public string Name { get; set; }
 		[Required]
-		[StringLength(100)]
-		public string Address { get; set; }
-		[StringLength(1000)]
-		public string Description { get; set; }
-		[Required]
         [StringLength(1000)]
         public string Pictures { get; set; }
         [Required]
@@ -38,5 +33,7 @@ namespace VietTravelApi.Models
         public decimal PriceBase { get; set; }
         public decimal TotalPrice { get; set; }
 		public int IsDelete { get; set; } // 1 là đã xóa, 0 là chưa xóa
-	}
+        public string CoordLat { get; set; } //vĩ độ
+        public string CoordLon { get; set; } //kinh độ
+    }
 }
