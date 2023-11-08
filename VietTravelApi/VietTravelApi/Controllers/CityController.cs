@@ -157,6 +157,8 @@ namespace VietTravelApi.Controllers
                 if (City != null)
                 {
                     if(value.Pictures.Equals("File null")) value.Pictures = City.Pictures;
+                    value.NumberOfEvaluate = City.NumberOfEvaluate;
+                    value.MediumStar = City.MediumStar;
                     value.Tours = City.Tours;
                     _dataContext.Entry(City).CurrentValues.SetValues(value);
                     _dataContext.SaveChanges();

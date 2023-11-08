@@ -171,6 +171,8 @@ namespace VietTravelApi.Controllers
                 if (restaurant != null)
                 {
                     if (value.Pictures.Equals("File null")) value.Pictures = restaurant.Pictures;
+                    value.NumberOfEvaluate = restaurant.NumberOfEvaluate;
+                    value.MediumStar = restaurant.MediumStar;
                     _dataContext.Entry(restaurant).CurrentValues.SetValues(value);
                     _dataContext.SaveChanges();
                     return Ok(value);

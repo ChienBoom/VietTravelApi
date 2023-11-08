@@ -31,7 +31,7 @@ namespace VietTravelApi.Models
         public string CreateBy { get; set; }
         public string ListScheduleTourPackage { get; set; }
         [NotMapped]
-        public List<ScheduleTourPackage> ScheduleTourPackages { get; set; }
+        public List<Schedule> ScheduleTourPackages { get; set; }
         public int IsDelete { get; set; } // 1 là đã xóa, 0 là chưa xóa
     }
 }

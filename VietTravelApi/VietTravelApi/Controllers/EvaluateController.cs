@@ -148,6 +148,29 @@ namespace VietTravelApi.Controllers
             Evaluate evaluate = value;
             try
             {
+                switch (value.Eva)
+                {
+                    case 1:
+                        City city = _dataContext.City.FirstOrDefault(o => o.Id == value.EvaId && o.IsDelete == 0);
+                        if (city == null) return BadRequest();
+                        else city.NumberOfEvaluate += 1;
+                        break;
+                    case 2:
+                        Tour tour = _dataContext.Tour.FirstOrDefault(o => o.Id == value.EvaId && o.IsDelete == 0);
+                        if (tour == null) return BadRequest();
+                        else tour.NumberOfEvaluate += 1;
+                        break;
+                    case 3:
+                        Hotel hotel = _dataContext.Hotel.FirstOrDefault(o => o.Id == value.EvaId && o.IsDelete == 0);
+                        if (hotel == null) return BadRequest();
+                        else hotel.NumberOfEvaluate += 1;
+                        break;
+                    case 4:
+                        Restaurant restaurant = _dataContext.Restaurant.FirstOrDefault(o => o.Id == value.EvaId && o.IsDelete == 0);
+                        if (restaurant == null) return BadRequest();
+                        else restaurant.NumberOfEvaluate += 1;
+                        break;
+                }
                 _dataContext.Evaluate.Add(evaluate);
                 _dataContext.SaveChanges();
                 return Ok(evaluate);

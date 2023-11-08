@@ -236,6 +236,8 @@ namespace VietTravelApi.Controllers
                 if (tour != null)
                 {
                     if (value.Pictures.Equals("File null")) value.Pictures = tour.Pictures;
+                    value.NumberOfEvaluate = tour.NumberOfEvaluate;
+                    value.MediumStar = tour.MediumStar;
                     _dataContext.Entry(tour).CurrentValues.SetValues(value);
                     _dataContext.SaveChanges();
                     return Ok(value);
