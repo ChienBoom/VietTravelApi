@@ -92,6 +92,9 @@ namespace VietTravelApi.Controllers
                 var User = _dataContext.User.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 if (User != null)
                 {
+                    value.Username = User.Username;
+                    value.Password = User.Password;
+                    value.Role = User.Role;
                     _dataContext.Entry(User).CurrentValues.SetValues(value);
                     _dataContext.SaveChanges();
                     return Ok(value);
@@ -200,6 +203,27 @@ namespace VietTravelApi.Controllers
             catch (Exception ex)
             {
                 return BadRequest();
+            }
+        }
+
+        [HttpGet]
+        [Route("updatePassword/{userName}/{oldPassword}/{newPassword}")]
+        public async Task<IActionResult> UpdatePassword(string userName, string oldPassword, string newPassword)
+        {
+            try
+            {
+                User user = _dataContext.User.FirstOrDefault(o => o.Username.Equals(userName) && o.Password.Equals(oldPassword));
+                if (user == null) return NotFound();
+                else
+                {
+                    user.Password = newPassword;
+                    _dataContext.SaveChanges();
+                    return Ok();
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
         }
 

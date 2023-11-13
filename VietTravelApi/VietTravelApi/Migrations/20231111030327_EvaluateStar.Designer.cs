@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VietTravelApi.Context;
 
 namespace VietTravelApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20231111030327_EvaluateStar")]
+    partial class EvaluateStar
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -49,9 +51,6 @@ namespace VietTravelApi.Migrations
                         .HasMaxLength(255);
 
                     b.Property<int>("NumberOfEvaluate")
-                        .HasColumnType("int");
-
-                    b.Property<int>("NumberOfEvaluateStar")
                         .HasColumnType("int");
 
                     b.Property<string>("Pictures")
@@ -116,8 +115,9 @@ namespace VietTravelApi.Migrations
                     b.Property<int>("IsDelete")
                         .HasColumnType("int");
 
-                    b.Property<int>("NumberStar")
-                        .HasColumnType("int");
+                    b.Property<string>("NumberStar")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");
@@ -197,9 +197,6 @@ namespace VietTravelApi.Migrations
                     b.Property<int>("NumberOfEvaluate")
                         .HasColumnType("int");
 
-                    b.Property<int>("NumberOfEvaluateStar")
-                        .HasColumnType("int");
-
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(12)")
@@ -258,9 +255,6 @@ namespace VietTravelApi.Migrations
                         .HasMaxLength(50);
 
                     b.Property<int>("NumberOfEvaluate")
-                        .HasColumnType("int");
-
-                    b.Property<int>("NumberOfEvaluateStar")
                         .HasColumnType("int");
 
                     b.Property<string>("PhoneNumber")
@@ -409,9 +403,6 @@ namespace VietTravelApi.Migrations
                         .HasMaxLength(100);
 
                     b.Property<int>("NumberOfEvaluate")
-                        .HasColumnType("int");
-
-                    b.Property<int>("NumberOfEvaluateStar")
                         .HasColumnType("int");
 
                     b.Property<string>("Pictures")

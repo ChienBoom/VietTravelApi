@@ -1,0 +1,234 @@
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using VietTravelApi.Context;
+using VietTravelApi.Models;
+
+namespace VietTravelApi.Controllers
+{
+    [Route("evaluateStar")]
+    [ApiController]
+    public class EvaluateStarController : ControllerBase
+    {
+        public DataContext _dataContext;
+        public EvaluateStarController(DataContext dataContext)
+        {
+            _dataContext = dataContext;
+        }
+
+        //[HttpGet]
+        //public IActionResult GetAllEvaluate()
+        //{
+        //    try
+        //    {
+        //        return Ok(_dataContext.Evaluate.ToList());
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message.ToString());
+        //    }
+        //}
+
+        //[HttpGet("{id}")]
+        //public IActionResult GetEvaluateById(long id)
+        //{
+        //    try
+        //    {
+        //        Evaluate Evaluate = _dataContext.Evaluate.FirstOrDefault(b => b.Id == id);
+        //        if (Evaluate == null) return NotFound();
+        //        return Ok(Evaluate);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message.ToString());
+        //    }
+        //}
+
+        [HttpGet("evaStarCity/{value}")]
+        public IActionResult EvaluateStarCityId(long value)
+        {
+            try
+            {
+                List<EvaluateStar> evaluateStars = _dataContext.EvaluateStar.Where(b => b.EvaId == value && b.Eva == 1 && b.IsDelete == 0).ToList();
+                if (evaluateStars == null) return NotFound();
+                else
+                {
+                    foreach (EvaluateStar eva in evaluateStars)
+                    {
+                        User user = _dataContext.User.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == eva.UserId);
+                        if (user == null) return NotFound();
+                        eva.User = user;
+                    }
+                    return Ok(evaluateStars);
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message.ToString());
+            }
+        }
+
+        [HttpGet("evaStarTour/{value}")]
+        public IActionResult EvaluateStarTourId(long value)
+        {
+            try
+            {
+                List<EvaluateStar> evaluateStars = _dataContext.EvaluateStar.Where(b => b.EvaId == value && b.Eva == 2 && b.IsDelete == 0).ToList();
+                if (evaluateStars == null) return NotFound();
+                else
+                {
+                    foreach (EvaluateStar eva in evaluateStars)
+                    {
+                        User user = _dataContext.User.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == eva.UserId);
+                        if (user == null) return NotFound();
+                        eva.User = user;
+                    }
+                    return Ok(evaluateStars);
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message.ToString());
+            }
+        }
+
+        [HttpGet("evaStarHotel/{value}")]
+        public IActionResult EvaluateStarHotelId(long value)
+        {
+            try
+            {
+                List<EvaluateStar> evaluateStars = _dataContext.EvaluateStar.Where(b => b.EvaId == value && b.Eva == 3 && b.IsDelete == 0).ToList();
+                if (evaluateStars == null) return NotFound();
+                else
+                {
+                    foreach (EvaluateStar eva in evaluateStars)
+                    {
+                        User user = _dataContext.User.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == eva.UserId);
+                        if (user == null) return NotFound();
+                        eva.User = user;
+                    }
+                    return Ok(evaluateStars);
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message.ToString());
+            }
+        }
+
+        [HttpGet("evaStarRestaurant/{value}")]
+        public IActionResult EvaluateStarRestaurantId(long value)
+        {
+            try
+            {
+                List<EvaluateStar> evaluateStars = _dataContext.EvaluateStar.Where(b => b.EvaId == value && b.Eva == 4 && b.IsDelete == 0).ToList();
+                if (evaluateStars == null) return NotFound();
+                else
+                {
+                    foreach (EvaluateStar eva in evaluateStars)
+                    {
+                        User user = _dataContext.User.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == eva.UserId);
+                        if (user == null) return NotFound();
+                        eva.User = user;
+                    }
+                    return Ok(evaluateStars);
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message.ToString());
+            }
+        }
+
+        [HttpPost]
+        public IActionResult Post([FromBody] EvaluateStar value)
+        {
+            EvaluateStar evaluateStar = value;
+            try
+            {
+                switch (value.Eva)
+                {
+                    case 1:
+                        City city = _dataContext.City.FirstOrDefault(o => o.Id == value.EvaId && o.IsDelete == 0);
+                        if (city == null) return BadRequest();
+                        else city.NumberOfEvaluateStar += 1;
+                        List<EvaluateStar> evaluateStarCitys = _dataContext.EvaluateStar.Where(o => o.Eva == 1 && o.EvaId == city.Id && o.IsDelete == 0).ToList();
+                        city.MediumStar = (float)(evaluateStarCitys.Sum(o => o.NumberStar) + value.NumberStar) / city.NumberOfEvaluateStar;
+                        break;
+                    case 2:
+                        Tour tour = _dataContext.Tour.FirstOrDefault(o => o.Id == value.EvaId && o.IsDelete == 0);
+                        if (tour == null) return BadRequest();
+                        else tour.NumberOfEvaluateStar += 1;
+                        List<EvaluateStar> evaluateStarTours = _dataContext.EvaluateStar.Where(o => o.Eva == 2 && o.EvaId == tour.Id && o.IsDelete == 0).ToList();
+                        tour.MediumStar = (float)(evaluateStarTours.Sum(o => o.NumberStar) + value.NumberStar) / tour.NumberOfEvaluateStar;
+                        break;
+                    case 3:
+                        Hotel hotel = _dataContext.Hotel.FirstOrDefault(o => o.Id == value.EvaId && o.IsDelete == 0);
+                        if (hotel == null) return BadRequest();
+                        else hotel.NumberOfEvaluateStar += 1;
+                        List<EvaluateStar> evaluateStarHotels = _dataContext.EvaluateStar.Where(o => o.Eva == 3 && o.EvaId == hotel.Id && o.IsDelete == 0).ToList();
+                        hotel.MediumStar = (float)(evaluateStarHotels.Sum(o => o.NumberStar) + value.NumberStar) / hotel.NumberOfEvaluateStar;
+                        break;
+                    case 4:
+                        Restaurant restaurant = _dataContext.Restaurant.FirstOrDefault(o => o.Id == value.EvaId && o.IsDelete == 0);
+                        if (restaurant == null) return BadRequest();
+                        else restaurant.NumberOfEvaluateStar += 1;
+                        List<EvaluateStar> evaluateStarRes = _dataContext.EvaluateStar.Where(o => o.Eva == 4 && o.EvaId == restaurant.Id && o.IsDelete == 0).ToList();
+                        restaurant.MediumStar = (float)(evaluateStarRes.Sum(o => o.NumberStar) + value.NumberStar) / restaurant.NumberOfEvaluateStar;
+                        break;
+                }
+                _dataContext.EvaluateStar.Add(evaluateStar);
+                _dataContext.SaveChanges();
+                return Ok(evaluateStar);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message.ToString());
+            }
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult Put(long id, [FromBody] EvaluateStar value)
+        {
+            try
+            {
+                var evaluateStar = _dataContext.EvaluateStar.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
+                if (evaluateStar != null)
+                {
+                    _dataContext.Entry(evaluateStar).CurrentValues.SetValues(value);
+                    _dataContext.SaveChanges();
+                    return Ok(value);
+                }
+                return NotFound();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message.ToString());
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(long id)
+        {
+            try
+            {
+                var evaluateStar = _dataContext.EvaluateStar.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
+                if (evaluateStar != null)
+                {
+                    //_dataContext.Remove(evaluate);
+                    evaluateStar.IsDelete = 1;
+                    _dataContext.SaveChanges();
+                    return Ok();
+                }
+                return NotFound();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message.ToString());
+            }
+        }
+
+    }
+}

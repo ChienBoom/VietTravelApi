@@ -27,6 +27,7 @@ namespace VietTravelApi.Models
         public string ContentIntroduct { get; set; }
 		public long CityId { get; set; }
         public int NumberOfEvaluate { get; set; }
+        public int NumberOfEvaluateStar { get; set; }
         public float MediumStar { get; set; }
         public string UniCodeName { get; set; }
         public decimal PriceTourGuide { get; set; }

@@ -27,6 +27,7 @@ namespace VietTravelApi.Models
 		public string UniCodeName { get; set; }
 		public int IsDelete { get; set; } // 1 là đã xóa, 0 là chưa xóa
 		public int NumberOfEvaluate { get; set; }
+		public int NumberOfEvaluateStar { get; set; }
 		public float MediumStar { get; set; }
 		public string CoordLat { get; set; } //vĩ độ
 		public string CoordLon { get; set; } //kinh độ

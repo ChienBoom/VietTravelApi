@@ -8,6 +8,7 @@ namespace VietTravelApi.Context
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
         public DbSet<City> City { get; set; }
         public DbSet<Evaluate> Evaluate { get; set; }
+        public DbSet<EvaluateStar> EvaluateStar { get; set; }
         public DbSet<Hotel> Hotel { get; set; }
         public DbSet<Schedule > Schedule { get; set; }
         public DbSet<Ticket> Ticket { get; set; }
