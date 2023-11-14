@@ -20,6 +20,7 @@ namespace VietTravelApi.Context
         public DbSet<Restaurant> Restaurant { get; set; }
 
         public DbSet<Event> Event { get; set; }
+        public DbSet<HistoryChangeStatusTicket> HistoryChangeStatusTicket { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

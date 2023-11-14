@@ -272,5 +272,45 @@ namespace VietTravelApi.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("hotTour")]
+        public IActionResult HotTour()
+        {
+            try
+            {
+                List<Tour> tours = _dataContext.Tour.Where(o => o.IsDelete == 0).OrderByDescending(o => o.MediumStar).ToList();
+                List<Tour> hotTours = tours.Take(3).ToList();
+                List<float> hotValue = new List<float> { hotTours[0].MediumStar, hotTours[1].MediumStar, hotTours[2].MediumStar };
+                hotValue = hotValue.Distinct().ToList();
+                if(hotValue.Count == 1)
+                {
+                    return Ok(tours.Where(o => o.IsDelete == 0 && o.MediumStar == hotTours[0].MediumStar).OrderByDescending(o => o.NumberOfEvaluateStar).Take(3).ToList());
+                }
+                else if(hotValue.Count == 2 && hotTours[0].MediumStar == hotTours[1].MediumStar)
+                {
+                    List<Tour> hotTour1 = tours.Where(o => o.IsDelete == 0 && o.MediumStar == hotValue[0]).OrderByDescending(o => o.NumberOfEvaluateStar).Take(2).ToList();
+                    List<Tour> hotTour2 = tours.Where(o => o.IsDelete == 0 && o.MediumStar == hotValue[1]).OrderByDescending(o => o.NumberOfEvaluateStar).Take(1).ToList();
+                    return Ok(hotTour1.Union(hotTour2).ToList());
+                }
+                else if(hotValue.Count == 2 && hotTours[1].MediumStar == hotTours[2].MediumStar)
+                {
+                    List<Tour> hotTour1 = tours.Where(o => o.IsDelete == 0 && o.MediumStar == hotTours[0].MediumStar).OrderByDescending(o => o.NumberOfEvaluateStar).Take(1).ToList();
+                    List<Tour> hotTour2 = tours.Where(o => o.IsDelete == 0 && o.MediumStar == hotTours[2].MediumStar).OrderByDescending(o => o.NumberOfEvaluateStar).Take(2).ToList();
+                    return Ok(hotTour1.Union(hotTour2).ToList());
+                }
+                else
+                {
+                    List<Tour> hotTour1 = tours.Where(o => o.IsDelete == 0 && o.MediumStar == hotTours[0].MediumStar).OrderByDescending(o => o.NumberOfEvaluateStar).Take(1).ToList();
+                    List<Tour> hotTour2 = tours.Where(o => o.IsDelete == 0 && o.MediumStar == hotTours[1].MediumStar).OrderByDescending(o => o.NumberOfEvaluateStar).Take(1).ToList();
+                    List<Tour> hotTour3 = tours.Where(o => o.IsDelete == 0 && o.MediumStar == hotTours[2].MediumStar).OrderByDescending(o => o.NumberOfEvaluateStar).Take(1).ToList();
+                    return Ok(hotTour1.Union(hotTour2).Union(hotTour3).ToList());
+                }
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message.ToString());
+            }
+        }
+
     }
 }

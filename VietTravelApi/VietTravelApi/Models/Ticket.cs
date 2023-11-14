@@ -24,5 +24,6 @@ namespace VietTravelApi.Models
 		[NotMapped]
 		public TourPackage TourPackage { get; set; }
 		public int IsDelete { get; set; } // 1 là đã xóa, 0 là chưa xóa
+		public int Status { get; set; }
 	}
 }
