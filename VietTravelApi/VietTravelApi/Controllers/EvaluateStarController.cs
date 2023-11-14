@@ -230,5 +230,22 @@ namespace VietTravelApi.Controllers
             }
         }
 
+        [HttpGet("evaStar/{eva}/{evaId}/{username}")]
+        public IActionResult GetEvaStar(int eva, long evaId, string username)
+        {
+            try
+            {
+                User user = _dataContext.User.FirstOrDefault(o => o.Username.Equals(username));
+                if (user == null) return NotFound();
+                EvaluateStar evaluateStar =  _dataContext.EvaluateStar.FirstOrDefault(o => o.IsDelete == 0 && o.Eva == eva && o.EvaId == evaId && o.UserId == user.Id);
+                if (evaluateStar == null) return Ok();
+                else return Ok(evaluateStar);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest();
+            }
+        }
+
     }
 }
