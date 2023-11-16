@@ -37,5 +37,12 @@ namespace VietTravelApi.Models
         [NotMapped]
         public Restaurant Restaurant { get; set; }
         public int IsDelete { get; set; } // 1 là đã xóa, 0 là chưa xóa
+        //
+        [NotMapped]
+        public Tour Tour { get; set; }
+        [NotMapped]
+        public List<Ticket> Tickets { get; set; }
+        [NotMapped]
+        public TimePackage TimePackage { get; set; }
     }
 }

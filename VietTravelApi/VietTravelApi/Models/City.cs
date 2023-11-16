@@ -23,7 +23,6 @@ namespace VietTravelApi.Models
         [Required]
         [StringLength(2000)]
         public string ContentIntroduct { get; set; }
-		public List<Tour> Tours { get; set; }
 		public string UniCodeName { get; set; }
 		public int IsDelete { get; set; } // 1 là đã xóa, 0 là chưa xóa
 		public int NumberOfEvaluate { get; set; }
@@ -31,5 +30,18 @@ namespace VietTravelApi.Models
 		public float MediumStar { get; set; }
 		public string CoordLat { get; set; } //vĩ độ
 		public string CoordLon { get; set; } //kinh độ
+		//
+		[NotMapped]
+		public List<Tour> Tours { get; set; }
+		[NotMapped]
+		public List<Hotel> Hotels { get; set; }
+		[NotMapped]
+		public List<Restaurant> Restaurants { get; set; }
+		[NotMapped]
+		public List<TourGuide> TourGuides	{ get; set; }
+		[NotMapped]
+		public List<Evaluate> Evaluates { get; set; }
+		[NotMapped]
+		public List<EvaluateStar> EvaluateStars { get; set; }
 	}
 }

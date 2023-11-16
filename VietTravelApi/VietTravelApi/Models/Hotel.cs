@@ -35,5 +35,14 @@ namespace VietTravelApi.Models
 		public int NumberOfEvaluate { get; set; }
 		public int NumberOfEvaluateStar { get; set; }
 		public float MediumStar { get; set; }
+		//
+		[NotMapped]
+		public City City { get; set; }
+		[NotMapped]
+		public List<Evaluate> Evaluates { get; set; }
+		[NotMapped]
+		public List<EvaluateStar> EvaluateStars { get; set; }
+		[NotMapped]
+		public List<TourPackage> TourPackages { get; set; }
 	}
 }

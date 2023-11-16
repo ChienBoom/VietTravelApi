@@ -36,5 +36,18 @@ namespace VietTravelApi.Models
 		public int IsDelete { get; set; } // 1 là đã xóa, 0 là chưa xóa
         public string CoordLat { get; set; } //vĩ độ
         public string CoordLon { get; set; } //kinh độ
+        //
+        [NotMapped]
+        public City City { get; set; }
+        [NotMapped]
+        public List<Event> Events { get; set; }
+        [NotMapped]
+        public List<Schedule> Schedules { get; set; }
+        [NotMapped]
+        public List<TourPackage> TourPackages { get; set; }
+        [NotMapped]
+        public List<Evaluate> Evaluates { get; set; }
+        [NotMapped]
+        public List<EvaluateStar> EvaluateStars { get; set; }
     }
 }

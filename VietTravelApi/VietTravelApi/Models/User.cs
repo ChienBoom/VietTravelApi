@@ -40,5 +40,10 @@ namespace VietTravelApi.Models
 		public List<Ticket> Tickets { get; set; }
         public string UniCodeName { get; set; }
 		public int IsDelete { get; set; } // 1 là đã xóa, 0 là chưa xóa
+		//
+		[NotMapped]
+		public List<Evaluate> Evaluates { get; set; }
+		[NotMapped]
+		public List<EvaluateStar> EvaluateStars { get; set; }
 	}
 }

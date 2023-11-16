@@ -279,6 +279,7 @@ namespace VietTravelApi.Controllers
             try
             {
                 List<Tour> tours = _dataContext.Tour.Where(o => o.IsDelete == 0).OrderByDescending(o => o.MediumStar).ToList();
+                if (tours.Count == 0 || tours == null) return Ok(new List<Tour>());
                 List<Tour> hotTours = tours.Take(3).ToList();
                 List<float> hotValue = new List<float> { hotTours[0].MediumStar, hotTours[1].MediumStar, hotTours[2].MediumStar };
                 hotValue = hotValue.Distinct().ToList();

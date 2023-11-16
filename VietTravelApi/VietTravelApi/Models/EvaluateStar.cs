@@ -25,5 +25,18 @@ namespace VietTravelApi.Models
 		[NotMapped]
 		public User User { get; set; }
 		public int IsDelete { get; set; } // 1 là đã xóa, 0 là chưa xóa
+		//
+		[NotMapped]
+		public City City { get; set; }
+		[NotMapped]
+		public Tour Tour { get; set; }
+		[NotMapped]
+		public Hotel Hotel { get; set; }
+		[NotMapped]
+		public Restaurant Restaurant { get; set; }
+		public long CityId { get; set; }
+		public long TourId { get; set; }
+		public long HotelId { get; set; }
+		public long RestaurantId { get; set; }
 	}
 }

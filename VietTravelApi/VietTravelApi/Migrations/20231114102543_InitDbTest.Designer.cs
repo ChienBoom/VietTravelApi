@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VietTravelApi.Context;
 
 namespace VietTravelApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20231114102543_InitDbTest")]
+    partial class InitDbTest
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -79,9 +81,6 @@ namespace VietTravelApi.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<long>("CityId")
-                        .HasColumnType("bigint");
-
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -92,32 +91,13 @@ namespace VietTravelApi.Migrations
                     b.Property<long>("EvaId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("HotelId")
-                        .HasColumnType("bigint");
-
                     b.Property<int>("IsDelete")
                         .HasColumnType("int");
-
-                    b.Property<long>("RestaurantId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("TourId")
-                        .HasColumnType("bigint");
 
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CityId");
-
-                    b.HasIndex("HotelId");
-
-                    b.HasIndex("RestaurantId");
-
-                    b.HasIndex("TourId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("evaluate");
                 });
@@ -129,16 +109,10 @@ namespace VietTravelApi.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<long>("CityId")
-                        .HasColumnType("bigint");
-
                     b.Property<int>("Eva")
                         .HasColumnType("int");
 
                     b.Property<long>("EvaId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("HotelId")
                         .HasColumnType("bigint");
 
                     b.Property<int>("IsDelete")
@@ -147,26 +121,10 @@ namespace VietTravelApi.Migrations
                     b.Property<int>("NumberStar")
                         .HasColumnType("int");
 
-                    b.Property<long>("RestaurantId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("TourId")
-                        .HasColumnType("bigint");
-
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CityId");
-
-                    b.HasIndex("HotelId");
-
-                    b.HasIndex("RestaurantId");
-
-                    b.HasIndex("TourId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("evaluateStar");
                 });
@@ -200,8 +158,6 @@ namespace VietTravelApi.Migrations
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("TourId");
 
                     b.ToTable("event");
                 });
@@ -293,8 +249,6 @@ namespace VietTravelApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CityId");
-
                     b.ToTable("hotel");
                 });
 
@@ -358,8 +312,6 @@ namespace VietTravelApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CityId");
-
                     b.ToTable("restaurant");
                 });
 
@@ -398,8 +350,6 @@ namespace VietTravelApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TourId");
-
                     b.ToTable("Schedule");
                 });
 
@@ -430,10 +380,6 @@ namespace VietTravelApi.Migrations
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("TourPackageId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("ticket");
                 });
@@ -569,8 +515,6 @@ namespace VietTravelApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CityId");
-
                     b.ToTable("tourguide");
                 });
 
@@ -630,14 +574,6 @@ namespace VietTravelApi.Migrations
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("HotelId");
-
-                    b.HasIndex("RestaurantId");
-
-                    b.HasIndex("TimePackageId");
-
-                    b.HasIndex("TourId");
 
                     b.ToTable("tourpackage");
                 });
@@ -703,165 +639,12 @@ namespace VietTravelApi.Migrations
                     b.ToTable("user");
                 });
 
-            modelBuilder.Entity("VietTravelApi.Models.Evaluate", b =>
-                {
-                    b.HasOne("VietTravelApi.Models.City", "City")
-                        .WithMany("Evaluates")
-                        .HasForeignKey("CityId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("VietTravelApi.Models.Hotel", "Hotel")
-                        .WithMany("Evaluates")
-                        .HasForeignKey("HotelId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("VietTravelApi.Models.Restaurant", "Restaurant")
-                        .WithMany("Evaluates")
-                        .HasForeignKey("RestaurantId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("VietTravelApi.Models.Tour", "Tour")
-                        .WithMany("Evaluates")
-                        .HasForeignKey("TourId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("VietTravelApi.Models.User", "User")
-                        .WithMany("Evaluates")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("VietTravelApi.Models.EvaluateStar", b =>
-                {
-                    b.HasOne("VietTravelApi.Models.City", "City")
-                        .WithMany("EvaluateStars")
-                        .HasForeignKey("CityId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("VietTravelApi.Models.Hotel", "Hotel")
-                        .WithMany("EvaluateStars")
-                        .HasForeignKey("HotelId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("VietTravelApi.Models.Restaurant", "Restaurant")
-                        .WithMany("EvaluateStars")
-                        .HasForeignKey("RestaurantId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("VietTravelApi.Models.Tour", "Tour")
-                        .WithMany("EvaluateStars")
-                        .HasForeignKey("TourId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("VietTravelApi.Models.User", "User")
-                        .WithMany("EvaluateStars")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("VietTravelApi.Models.Event", b =>
-                {
-                    b.HasOne("VietTravelApi.Models.Tour", "Tour")
-                        .WithMany("Events")
-                        .HasForeignKey("TourId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("VietTravelApi.Models.Hotel", b =>
-                {
-                    b.HasOne("VietTravelApi.Models.City", "City")
-                        .WithMany("Hotels")
-                        .HasForeignKey("CityId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("VietTravelApi.Models.Restaurant", b =>
-                {
-                    b.HasOne("VietTravelApi.Models.City", "City")
-                        .WithMany("Restaurants")
-                        .HasForeignKey("CityId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("VietTravelApi.Models.Schedule", b =>
-                {
-                    b.HasOne("VietTravelApi.Models.Tour", "Tour")
-                        .WithMany("Schedules")
-                        .HasForeignKey("TourId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("VietTravelApi.Models.Ticket", b =>
-                {
-                    b.HasOne("VietTravelApi.Models.TourPackage", "TourPackage")
-                        .WithMany("Tickets")
-                        .HasForeignKey("TourPackageId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("VietTravelApi.Models.User", "User")
-                        .WithMany("Tickets")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("VietTravelApi.Models.Tour", b =>
                 {
-                    b.HasOne("VietTravelApi.Models.City", "City")
+                    b.HasOne("VietTravelApi.Models.City", null)
                         .WithMany("Tours")
                         .HasForeignKey("CityId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("VietTravelApi.Models.TourGuide", b =>
-                {
-                    b.HasOne("VietTravelApi.Models.City", "City")
-                        .WithMany("TourGuides")
-                        .HasForeignKey("CityId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("VietTravelApi.Models.TourPackage", b =>
-                {
-                    b.HasOne("VietTravelApi.Models.Hotel", "Hotel")
-                        .WithMany("TourPackages")
-                        .HasForeignKey("HotelId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("VietTravelApi.Models.Restaurant", "Restaurant")
-                        .WithMany("TourPackages")
-                        .HasForeignKey("RestaurantId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("VietTravelApi.Models.TimePackage", "TimePackage")
-                        .WithMany("TourPackages")
-                        .HasForeignKey("TimePackageId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("VietTravelApi.Models.Tour", "Tour")
-                        .WithMany("TourPackages")
-                        .HasForeignKey("TourId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

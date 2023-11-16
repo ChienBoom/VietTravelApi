@@ -24,30 +24,124 @@ namespace VietTravelApi.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //modelBuilder.Entity<City>()
-            //    .HasMany(p => p.Tours)
-            //    .WithOne(a => a.City)
-            //    .HasForeignKey(a => a.CityId);
-            //modelBuilder.Entity<Tour>()
-            //    .HasMany(p => p.TourPackages)
-            //    .WithOne(a => a.Tour)
-            //    .HasForeignKey(a => a.TourId);
-            //modelBuilder.Entity<TimePackage>()
-            //    .HasMany(p => p.TourPackages)
-            //    .WithOne(a => a.TimePackage)
-            //    .HasForeignKey(a => a.TimePackageId);
-            //modelBuilder.Entity<Hotel>()
-            //    .HasMany(p => p.TourPackages)
-            //    .WithOne(a => a.Hotel)
-            //    .HasForeignKey(a => a.HotelId);
-            //modelBuilder.Entity<Ticket>()
-            //    .HasOne(p => p.TourPackage)
-            //    .WithOne(a => a.Ticket)
-            //    .HasForeignKey<Ticket>(a => a.TourPackageId);
-            //modelBuilder.Entity<User>()
-            //    .HasMany(p => p.Tickets)
-            //    .WithOne(a => a.User)
-            //    .HasForeignKey(a => a.UserId);
+
+            modelBuilder.Entity<City>()
+                .HasMany(p => p.Tours)
+                .WithOne(a => a.City)
+                .HasForeignKey(a => a.CityId)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<City>()
+                .HasMany(p => p.Hotels)
+                .WithOne(a => a.City)
+                .HasForeignKey(a => a.CityId)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<City>()
+                .HasMany(p => p.Restaurants)
+                .WithOne(a => a.City)
+                .HasForeignKey(a => a.CityId)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<City>()
+                .HasMany(p => p.TourGuides)
+                .WithOne(a => a.City)
+                .HasForeignKey(a => a.CityId)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<City>()
+                .HasMany(p => p.Evaluates)
+                .WithOne(a => a.City)
+                .HasForeignKey(a => a.CityId)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<City>()
+                .HasMany(p => p.EvaluateStars)
+                .WithOne(a => a.City)
+                .HasForeignKey(a => a.CityId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Tour>()
+                .HasMany(p => p.Events)
+                .WithOne(a => a.Tour)
+                .HasForeignKey(a => a.TourId)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Tour>()
+                .HasMany(p => p.Schedules)
+                .WithOne(a => a.Tour)
+                .HasForeignKey(a => a.TourId)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Tour>()
+                .HasMany(p => p.TourPackages)
+                .WithOne(a => a.Tour)
+                .HasForeignKey(a => a.TourId)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Tour>()
+                .HasMany(p => p.Evaluates)
+                .WithOne(a => a.Tour)
+                .HasForeignKey(a => a.TourId)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Tour>()
+                .HasMany(p => p.EvaluateStars)
+                .WithOne(a => a.Tour)
+                .HasForeignKey(a => a.TourId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Hotel>()
+                .HasMany(p => p.Evaluates)
+                .WithOne(a => a.Hotel)
+                .HasForeignKey(a => a.HotelId)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Hotel>()
+                .HasMany(p => p.EvaluateStars)
+                .WithOne(a => a.Hotel)
+                .HasForeignKey(a => a.HotelId)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Hotel>()
+                .HasMany(p => p.TourPackages)
+                .WithOne(a => a.Hotel)
+                .HasForeignKey(a => a.HotelId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Restaurant>()
+                .HasMany(p => p.Evaluates)
+                .WithOne(a => a.Restaurant)
+                .HasForeignKey(a => a.RestaurantId)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Restaurant>()
+                .HasMany(p => p.EvaluateStars)
+                .WithOne(a => a.Restaurant)
+                .HasForeignKey(a => a.RestaurantId)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Restaurant>()
+                .HasMany(p => p.TourPackages)
+                .WithOne(a => a.Restaurant)
+                .HasForeignKey(a => a.RestaurantId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<TourPackage>()
+                .HasMany(p => p.Tickets)
+                .WithOne(a => a.TourPackage)
+                .HasForeignKey(a => a.TourPackageId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<TimePackage>()
+                .HasMany(p => p.TourPackages)
+                .WithOne(a => a.TimePackage)
+                .HasForeignKey(a => a.TimePackageId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<User>()
+                .HasMany(p => p.Evaluates)
+                .WithOne(a => a.User)
+                .HasForeignKey(a => a.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<User>()
+                .HasMany(p => p.EvaluateStars)
+                .WithOne(a => a.User)
+                .HasForeignKey(a => a.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<User>()
+                .HasMany(p => p.Tickets)
+                .WithOne(a => a.User)
+                .HasForeignKey(a => a.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
         }
     }
 }

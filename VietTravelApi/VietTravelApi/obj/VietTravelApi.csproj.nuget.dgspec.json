@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\MyProject\\VietTravelApiDev\\VietTravelApi\\VietTravelApi\\VietTravelApi.csproj": {}
+    "D:\\MyProject\\VietTravelApiNewDb\\VietTravelApi\\VietTravelApi\\VietTravelApi.csproj": {}
   },
   "projects": {
-    "D:\\MyProject\\VietTravelApiDev\\VietTravelApi\\VietTravelApi\\VietTravelApi.csproj": {
+    "D:\\MyProject\\VietTravelApiNewDb\\VietTravelApi\\VietTravelApi\\VietTravelApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\MyProject\\VietTravelApiDev\\VietTravelApi\\VietTravelApi\\VietTravelApi.csproj",
+        "projectUniqueName": "D:\\MyProject\\VietTravelApiNewDb\\VietTravelApi\\VietTravelApi\\VietTravelApi.csproj",
         "projectName": "VietTravelApi",
-        "projectPath": "D:\\MyProject\\VietTravelApiDev\\VietTravelApi\\VietTravelApi\\VietTravelApi.csproj",
+        "projectPath": "D:\\MyProject\\VietTravelApiNewDb\\VietTravelApi\\VietTravelApi\\VietTravelApi.csproj",
         "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
-        "outputPath": "D:\\MyProject\\VietTravelApiDev\\VietTravelApi\\VietTravelApi\\obj\\",
+        "outputPath": "D:\\MyProject\\VietTravelApiNewDb\\VietTravelApi\\VietTravelApi\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -51,6 +51,10 @@
             "MailKit": {
               "target": "Package",
               "version": "[4.2.0, )"
+            },
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[3.1.31, )"
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",

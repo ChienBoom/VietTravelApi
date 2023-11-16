@@ -15,5 +15,8 @@ namespace VietTravelApi.Models
         public string Description { get; set; }
         public int HourNumber { get; set; }
         public int IsDelete { get; set; } // 1 là đã xóa, 0 là chưa xóa
+        //
+        [NotMapped]
+        public List<TourPackage> TourPackages { get; set; }
     }
 }
