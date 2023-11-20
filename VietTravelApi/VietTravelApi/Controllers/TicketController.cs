@@ -215,5 +215,28 @@ namespace VietTravelApi.Controllers
             _dataContext.SaveChanges();
             return Ok();
         }
+
+        [HttpGet]
+        [Route("ticketOutOfDate")]
+        public IActionResult TicketOutOfDate()
+        {
+            var tickets = from ticket in _dataContext.Ticket
+                          join tourPackage in _dataContext.TourPackage
+                          on ticket.TourPackageId equals tourPackage.Id
+                          where tourPackage.EndTime < DateTime.Now
+                          select ticket;
+            List<Ticket> ticketOODs = tickets.ToList();
+            if(ticketOODs.Count >= 0)
+            {
+                foreach(Ticket item in ticketOODs)
+                {
+                    if(item.Status == 1) item.Status = 4;
+                    if (item.Status == 2) item.Status = 3;
+                }
+            }
+            _dataContext.SaveChanges();
+            return Ok();
+        }
+
     }
 }
