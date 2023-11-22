@@ -33,7 +33,7 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                return Ok(_dataContext.Tour.Where(o => o.IsDelete == 0).ToList());
+                return Ok(_dataContext.Tour.Where(o => o.IsDelete == 0).OrderByDescending(o => o.MediumStar).ToList());
             }
             catch (Exception ex)
             {
