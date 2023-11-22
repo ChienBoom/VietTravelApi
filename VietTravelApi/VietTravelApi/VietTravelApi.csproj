@@ -16,6 +16,7 @@
   <ItemGroup>
     <PackageReference Include="EntityFramework" Version="6.4.4" />
     <PackageReference Include="MailKit" Version="4.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.31" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.31" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.31">
       <PrivateAssets>all</PrivateAssets>

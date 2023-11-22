@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -7,10 +8,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using VietTravelApi.Common;
 using VietTravelApi.Context;
@@ -36,6 +39,25 @@ namespace VietTravelApi
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "VietTravelApi", Version = "v1" });
             });
+            //jwt
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = "dev-8q7qn5zomcwefzyy.us.auth0.com",
+                    ValidAudience = "dev-8q7qn5zomcwefzyy.us.auth0.com/api/v2/",
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("bzI-SQwv7Vls0CGqYl0m6bbBu-vn7sDuX1MTSdkFiUW6IaeRiiyJ6CExMfZkaNbC"))
+                };
+            });
+
             services.AddControllers();
             services.AddOptions();
             var mailsettings = Configuration.GetSection("MailSettings");

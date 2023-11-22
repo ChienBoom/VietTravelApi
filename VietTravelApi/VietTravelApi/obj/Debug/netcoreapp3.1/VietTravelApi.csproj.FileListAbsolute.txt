@@ -244,3 +244,5 @@ D:\MyProject\VietTravelApiNewDb\VietTravelApi\VietTravelApi\obj\Debug\netcoreapp
 D:\MyProject\VietTravelApiNewDb\VietTravelApi\VietTravelApi\obj\Debug\netcoreapp3.1\VietTravelApi.dll
 D:\MyProject\VietTravelApiNewDb\VietTravelApi\VietTravelApi\obj\Debug\netcoreapp3.1\VietTravelApi.pdb
 D:\MyProject\VietTravelApiNewDb\VietTravelApi\VietTravelApi\obj\Debug\netcoreapp3.1\VietTravelApi.genruntimeconfig.cache
+D:\MyProject\VietTravelApiNewDb\VietTravelApi\VietTravelApi\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+D:\MyProject\VietTravelApiNewDb\VietTravelApi\VietTravelApi\obj\Debug\netcoreapp3.1\VietTravelApi.csproj.AssemblyReference.cache
