@@ -92,6 +92,7 @@ namespace VietTravelApi.Controllers
                 var User = _dataContext.User.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 if (User != null)
                 {
+                    if (value.Picture == "File null") value.Picture = User.Picture;
                     value.Username = User.Username;
                     value.Password = User.Password;
                     value.Role = User.Role;

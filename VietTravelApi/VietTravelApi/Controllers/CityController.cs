@@ -31,7 +31,7 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                return Ok(_dataContext.City.Where(o => o.IsDelete == 0).ToList());
+                return Ok(_dataContext.City.Where(o => o.IsDelete == 0).OrderByDescending(o => o.MediumStar).ToList());
             }
             catch (Exception ex)
             {
@@ -156,7 +156,7 @@ namespace VietTravelApi.Controllers
                 var City = _dataContext.City.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 if (City != null)
                 {
-                    if(value.Pictures.Equals("File null")) value.Pictures = City.Pictures;
+                    if (value.Pictures.Equals("File null")) value.Pictures = City.Pictures;
                     value.NumberOfEvaluate = City.NumberOfEvaluate;
                     value.MediumStar = City.MediumStar;
                     value.Tours = City.Tours;
@@ -201,7 +201,7 @@ namespace VietTravelApi.Controllers
             try
             {
                 List<City> cities = _dataContext.City.Where(o => o.IsDelete == 0).OrderByDescending(o => o.MediumStar).ToList();
-                if (cities.Count <= 2 || cities == null) return Ok(new List<City>());
+                if (cities.Count < 3) return Ok(cities);
                 List<City> hotCities = cities.Take(3).ToList();
                 List<float> hotValue = new List<float> { hotCities[0].MediumStar, hotCities[1].MediumStar, hotCities[2].MediumStar };
                 hotValue = hotValue.Distinct().ToList();

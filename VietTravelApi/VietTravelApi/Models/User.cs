@@ -45,5 +45,6 @@ namespace VietTravelApi.Models
 		public List<Evaluate> Evaluates { get; set; }
 		[NotMapped]
 		public List<EvaluateStar> EvaluateStars { get; set; }
+		public string Picture { get; set; }
 	}
 }
