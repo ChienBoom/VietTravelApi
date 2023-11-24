@@ -34,7 +34,7 @@ namespace VietTravelApi
             services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("VietTravelConnStr")));
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "VietTravelApi", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "LaloliTravelApi", Version = "v1" });
             });
             services.AddControllers();
             services.AddOptions();
@@ -55,7 +55,7 @@ namespace VietTravelApi
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "VietTravelApi");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "LaloliTravelApi");
             });
 
             app.UseHttpsRedirection();
