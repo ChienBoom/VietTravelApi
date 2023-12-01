@@ -31,6 +31,7 @@ namespace VietTravelApi.Models
         public int IsDelete { get; set; } // 1 là đã xóa, 0 là chưa xóa
         //
         [NotMapped]
+        [JsonIgnore]
         public City City { get; set; }
     }
 }

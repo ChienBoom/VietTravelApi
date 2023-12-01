@@ -38,6 +38,7 @@ namespace VietTravelApi.Models
         public string CoordLon { get; set; } //kinh độ
         //
         [NotMapped]
+        [JsonIgnore]
         public City City { get; set; }
         [NotMapped]
         public List<Event> Events { get; set; }

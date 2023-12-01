@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace VietTravelApi.Models
 {
@@ -36,7 +37,9 @@ namespace VietTravelApi.Models
         public float MediumStar { get; set; }
         //
         [NotMapped]
+        [JsonIgnore]
         public City City { get; set; }
+        [NotMapped]
         public List<Evaluate> Evaluates { get; set; }
         [NotMapped]
         public List<EvaluateStar> EvaluateStars { get; set; }

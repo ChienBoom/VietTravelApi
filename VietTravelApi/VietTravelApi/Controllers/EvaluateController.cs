@@ -154,21 +154,37 @@ namespace VietTravelApi.Controllers
                         City city = _dataContext.City.FirstOrDefault(o => o.Id == value.EvaId && o.IsDelete == 0);
                         if (city == null) return BadRequest();
                         else city.NumberOfEvaluate += 1;
+                        evaluate.CityId = value.EvaId;
+                        evaluate.TourId = value.EvaId;
+                        evaluate.HotelId = value.EvaId;
+                        evaluate.RestaurantId = value.EvaId;
                         break;
                     case 2:
                         Tour tour = _dataContext.Tour.FirstOrDefault(o => o.Id == value.EvaId && o.IsDelete == 0);
                         if (tour == null) return BadRequest();
                         else tour.NumberOfEvaluate += 1;
+                        evaluate.CityId = value.EvaId;
+                        evaluate.TourId = value.EvaId;
+                        evaluate.HotelId = value.EvaId;
+                        evaluate.RestaurantId = value.EvaId;
                         break;
                     case 3:
                         Hotel hotel = _dataContext.Hotel.FirstOrDefault(o => o.Id == value.EvaId && o.IsDelete == 0);
                         if (hotel == null) return BadRequest();
                         else hotel.NumberOfEvaluate += 1;
+                        evaluate.CityId = value.EvaId;
+                        evaluate.TourId = value.EvaId;
+                        evaluate.HotelId = value.EvaId;
+                        evaluate.RestaurantId = value.EvaId;
                         break;
                     case 4:
                         Restaurant restaurant = _dataContext.Restaurant.FirstOrDefault(o => o.Id == value.EvaId && o.IsDelete == 0);
                         if (restaurant == null) return BadRequest();
                         else restaurant.NumberOfEvaluate += 1;
+                        evaluate.CityId = value.EvaId;
+                        evaluate.TourId = value.EvaId;
+                        evaluate.HotelId = value.EvaId;
+                        evaluate.RestaurantId = value.EvaId;
                         break;
                 }
                 _dataContext.Evaluate.Add(evaluate);

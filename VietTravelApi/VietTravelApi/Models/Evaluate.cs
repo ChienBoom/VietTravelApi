@@ -23,16 +23,21 @@ namespace VietTravelApi.Models
 		[Required]
 		public long UserId { get; set; }
 		[NotMapped]
-		public User User { get; set; }
+        //[JsonIgnore]
+        public User User { get; set; }
 		public int IsDelete { get; set; } // 1 là đã xóa, 0 là chưa xóa
 		//
 		[NotMapped]
+		[JsonIgnore]
 		public City City { get; set; }
 		[NotMapped]
+		[JsonIgnore]
 		public Tour Tour { get; set; }
 		[NotMapped]
+		[JsonIgnore]
 		public Hotel Hotel { get; set; }
 		[NotMapped]
+		[JsonIgnore]
 		public Restaurant Restaurant { get; set; }
 		public long CityId { get; set; }
 		public long	TourId { get; set; }

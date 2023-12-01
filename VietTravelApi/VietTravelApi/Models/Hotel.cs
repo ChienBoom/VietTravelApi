@@ -37,6 +37,7 @@ namespace VietTravelApi.Models
 		public float MediumStar { get; set; }
 		//
 		[NotMapped]
+		[JsonIgnore]
 		public City City { get; set; }
 		[NotMapped]
 		public List<Evaluate> Evaluates { get; set; }

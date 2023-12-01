@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace VietTravelApi.Models
@@ -23,16 +24,21 @@ namespace VietTravelApi.Models
 		[Required]
 		public long UserId { get; set; }
 		[NotMapped]
+		//[JsonIgnore]
 		public User User { get; set; }
 		public int IsDelete { get; set; } // 1 là đã xóa, 0 là chưa xóa
 		//
 		[NotMapped]
+		[JsonIgnore]
 		public City City { get; set; }
 		[NotMapped]
+		[JsonIgnore]
 		public Tour Tour { get; set; }
 		[NotMapped]
+		[JsonIgnore]
 		public Hotel Hotel { get; set; }
 		[NotMapped]
+		[JsonIgnore]
 		public Restaurant Restaurant { get; set; }
 		public long CityId { get; set; }
 		public long TourId { get; set; }

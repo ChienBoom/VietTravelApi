@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System;
+using System.Text.Json.Serialization;
 
 namespace VietTravelApi.Models
 {
@@ -22,8 +23,10 @@ namespace VietTravelApi.Models
         public int IsDelete { get; set; } // 1 là đã xóa, 0 là chưa xóa
         //
         [NotMapped]
+        [JsonIgnore]
         public Tour Tour { get; set; }
         [NotMapped]
+        [JsonIgnore]
         public TourPackage TourPackage { get; set; }
     }
 }

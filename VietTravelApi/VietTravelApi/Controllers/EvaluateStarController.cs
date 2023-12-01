@@ -156,6 +156,10 @@ namespace VietTravelApi.Controllers
                         else city.NumberOfEvaluateStar += 1;
                         List<EvaluateStar> evaluateStarCitys = _dataContext.EvaluateStar.Where(o => o.Eva == 1 && o.EvaId == city.Id && o.IsDelete == 0).ToList();
                         city.MediumStar = (float)(evaluateStarCitys.Sum(o => o.NumberStar) + value.NumberStar) / (city.NumberOfEvaluateStar);
+                        evaluateStar.CityId = value.EvaId;
+                        evaluateStar.TourId = value.EvaId;
+                        evaluateStar.HotelId = value.EvaId;
+                        evaluateStar.RestaurantId = value.EvaId;
                         break;
                     case 2:
                         Tour tour = _dataContext.Tour.FirstOrDefault(o => o.Id == value.EvaId && o.IsDelete == 0);
@@ -163,6 +167,10 @@ namespace VietTravelApi.Controllers
                         else tour.NumberOfEvaluateStar += 1;
                         List<EvaluateStar> evaluateStarTours = _dataContext.EvaluateStar.Where(o => o.Eva == 2 && o.EvaId == tour.Id && o.IsDelete == 0).ToList();
                         tour.MediumStar = (float)(evaluateStarTours.Sum(o => o.NumberStar) + value.NumberStar) / (tour.NumberOfEvaluateStar);
+                        evaluateStar.CityId = value.EvaId;
+                        evaluateStar.TourId = value.EvaId;
+                        evaluateStar.HotelId = value.EvaId;
+                        evaluateStar.RestaurantId = value.EvaId;
                         break;
                     case 3:
                         Hotel hotel = _dataContext.Hotel.FirstOrDefault(o => o.Id == value.EvaId && o.IsDelete == 0);
@@ -170,6 +178,10 @@ namespace VietTravelApi.Controllers
                         else hotel.NumberOfEvaluateStar += 1;
                         List<EvaluateStar> evaluateStarHotels = _dataContext.EvaluateStar.Where(o => o.Eva == 3 && o.EvaId == hotel.Id && o.IsDelete == 0).ToList();
                         hotel.MediumStar = (float)(evaluateStarHotels.Sum(o => o.NumberStar) + value.NumberStar) / (hotel.NumberOfEvaluateStar);
+                        evaluateStar.CityId = value.EvaId;
+                        evaluateStar.TourId = value.EvaId;
+                        evaluateStar.HotelId = value.EvaId;
+                        evaluateStar.RestaurantId = value.EvaId;
                         break;
                     case 4:
                         Restaurant restaurant = _dataContext.Restaurant.FirstOrDefault(o => o.Id == value.EvaId && o.IsDelete == 0);
@@ -177,6 +189,10 @@ namespace VietTravelApi.Controllers
                         else restaurant.NumberOfEvaluateStar += 1;
                         List<EvaluateStar> evaluateStarRes = _dataContext.EvaluateStar.Where(o => o.Eva == 4 && o.EvaId == restaurant.Id && o.IsDelete == 0).ToList();
                         restaurant.MediumStar = (float)(evaluateStarRes.Sum(o => o.NumberStar) + value.NumberStar) / (restaurant.NumberOfEvaluateStar);
+                        evaluateStar.CityId = value.EvaId;
+                        evaluateStar.TourId = value.EvaId;
+                        evaluateStar.HotelId = value.EvaId;
+                        evaluateStar.RestaurantId = value.EvaId;
                         break;
                 }
                 _dataContext.EvaluateStar.Add(evaluateStar);

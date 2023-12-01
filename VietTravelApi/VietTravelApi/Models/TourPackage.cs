@@ -33,16 +33,20 @@ namespace VietTravelApi.Models
         [NotMapped]
         public List<Schedule> ScheduleTourPackages { get; set; }
         [NotMapped]
+        [JsonIgnore]
         public Hotel Hotel { get; set; }
         [NotMapped]
+        [JsonIgnore]
         public Restaurant Restaurant { get; set; }
         public int IsDelete { get; set; } // 1 là đã xóa, 0 là chưa xóa
         //
         [NotMapped]
+        [JsonIgnore]
         public Tour Tour { get; set; }
         [NotMapped]
         public List<Ticket> Tickets { get; set; }
         [NotMapped]
+        [JsonIgnore]
         public TimePackage TimePackage { get; set; }
     }
 }
