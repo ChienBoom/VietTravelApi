@@ -278,7 +278,7 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                List<Tour> tours = _dataContext.Tour.Where(o => o.IsDelete == 0).OrderByDescending(o => o.MediumStar).ToList();
+                List<Tour> tours = _dataContext.Tour.Where(o => o.IsDelete == 0).OrderByDescending(o => o.MediumStar * 0.6 + o.NumberOfEvaluate * 0.4).ToList();
                 if (tours.Count < 3) return Ok(tours);
                 List<Tour> hotTours = tours.Take(3).ToList();
                 List<float> hotValue = new List<float> { hotTours[0].MediumStar, hotTours[1].MediumStar, hotTours[2].MediumStar };

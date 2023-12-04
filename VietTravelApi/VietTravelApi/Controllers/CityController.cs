@@ -200,7 +200,7 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                List<City> cities = _dataContext.City.Where(o => o.IsDelete == 0).OrderByDescending(o => o.MediumStar).ToList();
+                List<City> cities = _dataContext.City.Where(o => o.IsDelete == 0).OrderByDescending(o => o.MediumStar * 0.6 + o.NumberOfEvaluate * 0.4).ToList();
                 if (cities.Count < 3) return Ok(cities);
                 List<City> hotCities = cities.Take(3).ToList();
                 List<float> hotValue = new List<float> { hotCities[0].MediumStar, hotCities[1].MediumStar, hotCities[2].MediumStar };
