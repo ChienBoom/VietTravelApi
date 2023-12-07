@@ -1,8 +1,9 @@
-﻿using Newtonsoft.Json;
+﻿
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace VietTravelApi.Models
 {
@@ -44,6 +45,7 @@ namespace VietTravelApi.Models
         [JsonIgnore]
         public Tour Tour { get; set; }
         [NotMapped]
+        [JsonIgnore]
         public List<Ticket> Tickets { get; set; }
         [NotMapped]
         [JsonIgnore]
