@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using VietTravelApi.Common;
 using VietTravelApi.Context;
 using VietTravelApi.Models;
 
@@ -13,9 +14,11 @@ namespace VietTravelApi.Controllers
     public class EvaluateStarController : ControllerBase
     {
         public DataContext _dataContext;
-        public EvaluateStarController(DataContext dataContext)
+        public Jwt _jwt;
+        public EvaluateStarController(DataContext dataContext, Jwt jwt)
         {
             _dataContext = dataContext;
+            _jwt = jwt;
         }
 
         //[HttpGet]
@@ -148,6 +151,8 @@ namespace VietTravelApi.Controllers
             EvaluateStar evaluateStar = value;
             try
             {
+                string token = HttpContext.Request.Headers["Authorization"];
+                if (token == null || !_jwt.Auth("Customer", token)) return Unauthorized("Yêu cầu xác thực người dùng");
                 switch (value.Eva)
                 {
                     case 1:
@@ -156,10 +161,14 @@ namespace VietTravelApi.Controllers
                         else city.NumberOfEvaluateStar += 1;
                         List<EvaluateStar> evaluateStarCitys = _dataContext.EvaluateStar.Where(o => o.Eva == 1 && o.EvaId == city.Id && o.IsDelete == 0).ToList();
                         city.MediumStar = (float)(evaluateStarCitys.Sum(o => o.NumberStar) + value.NumberStar) / (city.NumberOfEvaluateStar);
-                        evaluateStar.CityId = value.EvaId;
-                        evaluateStar.TourId = value.EvaId;
-                        evaluateStar.HotelId = value.EvaId;
-                        evaluateStar.RestaurantId = value.EvaId;
+                        //evaluateStar.CityId = value.EvaId;
+                        //evaluateStar.TourId = value.EvaId;
+                        //evaluateStar.HotelId = value.EvaId;
+                        //evaluateStar.RestaurantId = value.EvaId;
+                        evaluateStar.CityId = 1;
+                        evaluateStar.TourId = 1;
+                        evaluateStar.HotelId = 1;
+                        evaluateStar.RestaurantId = 1;
                         break;
                     case 2:
                         Tour tour = _dataContext.Tour.FirstOrDefault(o => o.Id == value.EvaId && o.IsDelete == 0);
@@ -167,10 +176,14 @@ namespace VietTravelApi.Controllers
                         else tour.NumberOfEvaluateStar += 1;
                         List<EvaluateStar> evaluateStarTours = _dataContext.EvaluateStar.Where(o => o.Eva == 2 && o.EvaId == tour.Id && o.IsDelete == 0).ToList();
                         tour.MediumStar = (float)(evaluateStarTours.Sum(o => o.NumberStar) + value.NumberStar) / (tour.NumberOfEvaluateStar);
-                        evaluateStar.CityId = value.EvaId;
-                        evaluateStar.TourId = value.EvaId;
-                        evaluateStar.HotelId = value.EvaId;
-                        evaluateStar.RestaurantId = value.EvaId;
+                        //evaluateStar.CityId = value.EvaId;
+                        //evaluateStar.TourId = value.EvaId;
+                        //evaluateStar.HotelId = value.EvaId;
+                        //evaluateStar.RestaurantId = value.EvaId;
+                        evaluateStar.CityId = 1;
+                        evaluateStar.TourId = 1;
+                        evaluateStar.HotelId = 1;
+                        evaluateStar.RestaurantId = 1;
                         break;
                     case 3:
                         Hotel hotel = _dataContext.Hotel.FirstOrDefault(o => o.Id == value.EvaId && o.IsDelete == 0);
@@ -178,10 +191,14 @@ namespace VietTravelApi.Controllers
                         else hotel.NumberOfEvaluateStar += 1;
                         List<EvaluateStar> evaluateStarHotels = _dataContext.EvaluateStar.Where(o => o.Eva == 3 && o.EvaId == hotel.Id && o.IsDelete == 0).ToList();
                         hotel.MediumStar = (float)(evaluateStarHotels.Sum(o => o.NumberStar) + value.NumberStar) / (hotel.NumberOfEvaluateStar);
-                        evaluateStar.CityId = value.EvaId;
-                        evaluateStar.TourId = value.EvaId;
-                        evaluateStar.HotelId = value.EvaId;
-                        evaluateStar.RestaurantId = value.EvaId;
+                        //evaluateStar.CityId = value.EvaId;
+                        //evaluateStar.TourId = value.EvaId;
+                        //evaluateStar.HotelId = value.EvaId;
+                        //evaluateStar.RestaurantId = value.EvaId;
+                        evaluateStar.CityId = 1;
+                        evaluateStar.TourId = 1;
+                        evaluateStar.HotelId = 1;
+                        evaluateStar.RestaurantId = 1;
                         break;
                     case 4:
                         Restaurant restaurant = _dataContext.Restaurant.FirstOrDefault(o => o.Id == value.EvaId && o.IsDelete == 0);
@@ -189,12 +206,17 @@ namespace VietTravelApi.Controllers
                         else restaurant.NumberOfEvaluateStar += 1;
                         List<EvaluateStar> evaluateStarRes = _dataContext.EvaluateStar.Where(o => o.Eva == 4 && o.EvaId == restaurant.Id && o.IsDelete == 0).ToList();
                         restaurant.MediumStar = (float)(evaluateStarRes.Sum(o => o.NumberStar) + value.NumberStar) / (restaurant.NumberOfEvaluateStar);
-                        evaluateStar.CityId = value.EvaId;
-                        evaluateStar.TourId = value.EvaId;
-                        evaluateStar.HotelId = value.EvaId;
-                        evaluateStar.RestaurantId = value.EvaId;
+                        //evaluateStar.CityId = value.EvaId;
+                        //evaluateStar.TourId = value.EvaId;
+                        //evaluateStar.HotelId = value.EvaId;
+                        //evaluateStar.RestaurantId = value.EvaId;
+                        evaluateStar.CityId = 1;
+                        evaluateStar.TourId = 1;
+                        evaluateStar.HotelId = 1;
+                        evaluateStar.RestaurantId = 1;
                         break;
                 }
+                evaluateStar.User = null;
                 _dataContext.EvaluateStar.Add(evaluateStar);
                 _dataContext.SaveChanges();
                 return Ok(evaluateStar);
@@ -210,6 +232,8 @@ namespace VietTravelApi.Controllers
         {
             try
             {
+                string token = HttpContext.Request.Headers["Authorization"];
+                if (token == null || !_jwt.Auth("Customer", token)) return Unauthorized("Yêu cầu xác thực người dùng");
                 var evaluateStar = _dataContext.EvaluateStar.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 if (evaluateStar != null)
                 {
@@ -257,6 +281,8 @@ namespace VietTravelApi.Controllers
         {
             try
             {
+                string token = HttpContext.Request.Headers["Authorization"];
+                if (token == null || !_jwt.Auth("Customer", token)) return Unauthorized("Yêu cầu xác thực người dùng");
                 var evaluateStar = _dataContext.EvaluateStar.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 if (evaluateStar != null)
                 {

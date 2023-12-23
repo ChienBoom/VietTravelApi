@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using VietTravelApi.Common;
 using VietTravelApi.Context;
 using VietTravelApi.Models;
@@ -16,13 +17,15 @@ namespace VietTravelApi.Controllers
     {
         public DataContext _dataContext;
         public DeleteModels _deleteModels;
+        public Jwt _jwt;
         private readonly IConfiguration _configuration;
         public int pageSize;
-        public CityController(DataContext dataContext, IConfiguration configuration, DeleteModels deleteModels)
+        public CityController(DataContext dataContext, IConfiguration configuration, DeleteModels deleteModels, Jwt jwt)
         {
             _dataContext = dataContext;
             _configuration = configuration;
-            _deleteModels = deleteModels;
+            _deleteModels = deleteModels; 
+            _jwt = jwt;
             pageSize = int.Parse(_configuration["PageSize"]);
         }
 
@@ -135,6 +138,8 @@ namespace VietTravelApi.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] City value)
         {
+            string token = HttpContext.Request.Headers["Authorization"];
+            if (!_jwt.Auth("Admin", token)) return Unauthorized("Yêu cầu xác thực người dùng");
             City city = value;
             try
             {
@@ -153,6 +158,8 @@ namespace VietTravelApi.Controllers
         {
             try
             {
+                string token = HttpContext.Request.Headers["Authorization"];
+                if (token == null || !_jwt.Auth("Admin", token)) return Unauthorized("Yêu cầu xác thực người dùng");
                 var City = _dataContext.City.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 if (City != null)
                 {
@@ -177,6 +184,8 @@ namespace VietTravelApi.Controllers
         {
             try
             {
+                string token = HttpContext.Request.Headers["Authorization"];
+                if (token == null ||  !_jwt.Auth("Admin", token)) return Unauthorized("Yêu cầu xác thực người dùng");
                 var City = _dataContext.City.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 if (City != null)
                 {

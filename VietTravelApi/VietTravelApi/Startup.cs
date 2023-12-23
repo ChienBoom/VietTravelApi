@@ -64,6 +64,7 @@ namespace VietTravelApi
             services.Configure<MailSettings>(mailsettings);
             services.AddTransient<ISendMailService, SendMailService>();
             services.AddTransient<DeleteModels>();
+            services.AddTransient<Jwt>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

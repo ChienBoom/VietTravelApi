@@ -19,12 +19,14 @@ namespace VietTravelApi.Controllers
         public DataContext _dataContext;
         private readonly IConfiguration _configuration;
         public DeleteModels _deleteModels;
+        public Jwt _jwt;
         public int pageSize;
-        public TourController(DataContext dataContext, IConfiguration configuration, DeleteModels deleteModels)
+        public TourController(DataContext dataContext, IConfiguration configuration, DeleteModels deleteModels, Jwt jwt)
         {
             _dataContext = dataContext;
             _configuration = configuration;
             _deleteModels = deleteModels;
+            _jwt = jwt;
             pageSize = int.Parse(_configuration["PageSize"]);
         }
 
@@ -217,6 +219,8 @@ namespace VietTravelApi.Controllers
             Tour tour = value;
             try
             {
+                string token = HttpContext.Request.Headers["Authorization"];
+                if (token == null || !_jwt.Auth("Admin", token)) return Unauthorized("Yêu cầu xác thực người dùng");
                 _dataContext.Tour.Add(tour);
                 _dataContext.SaveChanges();
                 return Ok(tour);
@@ -232,6 +236,8 @@ namespace VietTravelApi.Controllers
         {
             try
             {
+                string token = HttpContext.Request.Headers["Authorization"];
+                if (token == null || !_jwt.Auth("Admin", token)) return Unauthorized("Yêu cầu xác thực người dùng");
                 var tour = _dataContext.Tour.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 if (tour != null)
                 {
@@ -255,6 +261,8 @@ namespace VietTravelApi.Controllers
         {
             try
             {
+                string token = HttpContext.Request.Headers["Authorization"];
+                if (token == null || !_jwt.Auth("Admin", token)) return Unauthorized("Yêu cầu xác thực người dùng");
                 var tour = _dataContext.Tour.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 if (tour != null)
                 {

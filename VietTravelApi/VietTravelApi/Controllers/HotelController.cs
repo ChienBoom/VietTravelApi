@@ -17,12 +17,14 @@ namespace VietTravelApi.Controllers
         public DataContext _dataContext;
         private readonly IConfiguration _configuration;
         public DeleteModels _deleteModels;
+        public Jwt _jwt;
         public int pageSize;
-        public HotelController(DataContext dataContext, IConfiguration configuration, DeleteModels deleteModels)
+        public HotelController(DataContext dataContext, IConfiguration configuration, DeleteModels deleteModels, Jwt jwt)
         {
             _dataContext = dataContext;
             _configuration = configuration;
             _deleteModels =deleteModels;
+            _jwt = jwt;
             pageSize = int.Parse(_configuration["PageSize"]);
         }
 
@@ -152,6 +154,8 @@ namespace VietTravelApi.Controllers
             Hotel Hotel = value;
             try
             {
+                string token = HttpContext.Request.Headers["Authorization"];
+                if (token == null || !_jwt.Auth("Admin", token)) return Unauthorized("Yêu cầu xác thực người dùng");
                 _dataContext.Hotel.Add(Hotel);
                 _dataContext.SaveChanges();
                 return Ok(Hotel);
@@ -167,6 +171,8 @@ namespace VietTravelApi.Controllers
         {
             try
             {
+                string token = HttpContext.Request.Headers["Authorization"];
+                if (token == null || !_jwt.Auth("Admin", token)) return Unauthorized("Yêu cầu xác thực người dùng");
                 var Hotel = _dataContext.Hotel.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 if (Hotel != null)
                 {
@@ -190,6 +196,8 @@ namespace VietTravelApi.Controllers
         {
             try
             {
+                string token = HttpContext.Request.Headers["Authorization"];
+                if (token == null || !_jwt.Auth("Admin", token)) return Unauthorized("Yêu cầu xác thực người dùng");
                 var Hotel = _dataContext.Hotel.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 if (Hotel != null)
                 {

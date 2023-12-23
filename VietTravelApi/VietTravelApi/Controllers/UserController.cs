@@ -18,11 +18,13 @@ namespace VietTravelApi.Controllers
         public DataContext _dataContext;
         private readonly ISendMailService _sendMailService;
         public DeleteModels _deleteModels;
-        public UserController(DataContext dataContext, ISendMailService sendMailService, DeleteModels deleteModels)
+        public Jwt _jwt;
+        public UserController(DataContext dataContext, ISendMailService sendMailService, DeleteModels deleteModels, Jwt jwt)
         {
             _dataContext = dataContext;
             _sendMailService = sendMailService;
             _deleteModels = deleteModels;
+            _jwt = jwt;
         }
 
         [HttpGet]
@@ -30,6 +32,9 @@ namespace VietTravelApi.Controllers
         {
             try
             {
+                string token = HttpContext.Request.Headers["Authorization"];
+                bool test = _jwt.Auth("Admin", token);
+                if (token == null || !_jwt.Auth("Admin", token)) return Unauthorized("Yêu cầu xác thực người dùng");
                 return Ok(_dataContext.User.Where(o => o.IsDelete == 0).ToList());
             }
             catch (Exception ex)
@@ -43,6 +48,8 @@ namespace VietTravelApi.Controllers
         {
             try
             {
+                string token = HttpContext.Request.Headers["Authorization"];
+                if (token == null || !_jwt.Auth("Admin", token)) return Unauthorized("Yêu cầu xác thực người dùng");
                 User User = _dataContext.User.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 if (User == null) return NotFound();
                 return Ok(User);
@@ -89,6 +96,8 @@ namespace VietTravelApi.Controllers
         {
             try
             {
+                string token = HttpContext.Request.Headers["Authorization"];
+                if (token == null || (!_jwt.Auth("Customer", token) && !_jwt.Auth("Admin", token))) return Unauthorized("Yêu cầu xác thực người dùng");
                 var User = _dataContext.User.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 if (User != null)
                 {
@@ -113,6 +122,8 @@ namespace VietTravelApi.Controllers
         {
             try
             {
+                string token = HttpContext.Request.Headers["Authorization"];
+                if (token == null || (!_jwt.Auth("Customer", token) && !_jwt.Auth("Admin", token))) return Unauthorized("Yêu cầu xác thực người dùng");
                 var User = _dataContext.User.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 if (User != null)
                 {
@@ -161,6 +172,11 @@ namespace VietTravelApi.Controllers
                 {
                     if (value.Password == User.Password)
                     {
+                        JwtData jwtData = new JwtData();
+                        jwtData.Username = User.Username;
+                        jwtData.Role = User.Role;
+                        string token = _jwt.CreateToken(jwtData);
+                        HttpContext.Response.Headers.Add("Authorization", token);
                         return Ok(User.Role);
                     }
                     else
@@ -213,6 +229,8 @@ namespace VietTravelApi.Controllers
         {
             try
             {
+                string token = HttpContext.Request.Headers["Authorization"];
+                if (token == null || (!_jwt.Auth("Customer", token) && !_jwt.Auth("Admin", token))) return Unauthorized("Yêu cầu xác thực người dùng");
                 User user = _dataContext.User.FirstOrDefault(o => o.Username.Equals(userName) && o.Password.Equals(oldPassword));
                 if (user == null) return NotFound();
                 else

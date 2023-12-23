@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using VietTravelApi.Common;
 using VietTravelApi.Context;
 using VietTravelApi.Models;
 
@@ -13,9 +14,11 @@ namespace VietTravelApi.Controllers
     public class ScheduleController : ControllerBase
     {
         public DataContext _dataContext;
-        public ScheduleController(DataContext dataContext)
+        public Jwt _jwt;
+        public ScheduleController(DataContext dataContext, Jwt jwt)
         {
             _dataContext = dataContext;
+            _jwt = jwt;
         }
 
         [HttpGet]
@@ -82,6 +85,8 @@ namespace VietTravelApi.Controllers
             Schedule schedule = value;
             try
             {
+                string token = HttpContext.Request.Headers["Authorization"];
+                if (token == null || !_jwt.Auth("Admin", token)) return Unauthorized("Yêu cầu xác thực người dùng");
                 _dataContext.Schedule.Add(schedule);
                 _dataContext.SaveChanges();
                 return Ok(schedule);
@@ -97,6 +102,8 @@ namespace VietTravelApi.Controllers
         {
             try
             {
+                string token = HttpContext.Request.Headers["Authorization"];
+                if (token == null || !_jwt.Auth("Admin", token)) return Unauthorized("Yêu cầu xác thực người dùng");
                 var Schedule = _dataContext.Schedule.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 if (Schedule != null)
                 {
@@ -118,6 +125,8 @@ namespace VietTravelApi.Controllers
         {
             try
             {
+                string token = HttpContext.Request.Headers["Authorization"];
+                if (token == null || !_jwt.Auth("Admin", token)) return Unauthorized("Yêu cầu xác thực người dùng");
                 var Schedule = _dataContext.Schedule.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 if (Schedule != null)
                 {

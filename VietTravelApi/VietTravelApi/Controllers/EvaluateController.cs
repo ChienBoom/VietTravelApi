@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using VietTravelApi.Common;
 using VietTravelApi.Context;
 using VietTravelApi.Models;
 
@@ -13,9 +14,11 @@ namespace VietTravelApi.Controllers
     public class EvaluateController : ControllerBase
     {
         public DataContext _dataContext;
-        public EvaluateController(DataContext dataContext)
+        public Jwt _jwt;
+        public EvaluateController(DataContext dataContext, Jwt jwt)
         {
             _dataContext = dataContext;
+            _jwt = jwt;
         }
 
         //[HttpGet]
@@ -148,45 +151,64 @@ namespace VietTravelApi.Controllers
             Evaluate evaluate = value;
             try
             {
+                string token = HttpContext.Request.Headers["Authorization"];
+                if (token == null || !_jwt.Auth("Customer", token)) return Unauthorized("Yêu cầu xác thực người dùng");
                 switch (value.Eva)
                 {
                     case 1:
                         City city = _dataContext.City.FirstOrDefault(o => o.Id == value.EvaId && o.IsDelete == 0);
                         if (city == null) return BadRequest();
                         else city.NumberOfEvaluate += 1;
-                        evaluate.CityId = value.EvaId;
-                        evaluate.TourId = value.EvaId;
-                        evaluate.HotelId = value.EvaId;
-                        evaluate.RestaurantId = value.EvaId;
+                        //evaluate.CityId = value.EvaId;
+                        //evaluate.TourId = value.EvaId;
+                        //evaluate.HotelId = value.EvaId;
+                        //evaluate.RestaurantId = value.EvaId;
+                        evaluate.CityId = 1;
+                        evaluate.TourId = 1;
+                        evaluate.HotelId = 1;
+                        evaluate.RestaurantId = 1;
                         break;
                     case 2:
                         Tour tour = _dataContext.Tour.FirstOrDefault(o => o.Id == value.EvaId && o.IsDelete == 0);
                         if (tour == null) return BadRequest();
                         else tour.NumberOfEvaluate += 1;
-                        evaluate.CityId = value.EvaId;
-                        evaluate.TourId = value.EvaId;
-                        evaluate.HotelId = value.EvaId;
-                        evaluate.RestaurantId = value.EvaId;
+                        //evaluate.CityId = value.EvaId;
+                        //evaluate.TourId = value.EvaId;
+                        //evaluate.HotelId = value.EvaId;
+                        //evaluate.RestaurantId = value.EvaId;
+                        evaluate.CityId = 1;
+                        evaluate.TourId = 1;
+                        evaluate.HotelId = 1;
+                        evaluate.RestaurantId = 1;
                         break;
                     case 3:
                         Hotel hotel = _dataContext.Hotel.FirstOrDefault(o => o.Id == value.EvaId && o.IsDelete == 0);
                         if (hotel == null) return BadRequest();
                         else hotel.NumberOfEvaluate += 1;
-                        evaluate.CityId = value.EvaId;
-                        evaluate.TourId = value.EvaId;
-                        evaluate.HotelId = value.EvaId;
-                        evaluate.RestaurantId = value.EvaId;
+                        //evaluate.CityId = value.EvaId;
+                        //evaluate.TourId = value.EvaId;
+                        //evaluate.HotelId = value.EvaId;
+                        //evaluate.RestaurantId = value.EvaId;
+                        evaluate.CityId = 1;
+                        evaluate.TourId = 1;
+                        evaluate.HotelId = 1;
+                        evaluate.RestaurantId = 1;
                         break;
                     case 4:
                         Restaurant restaurant = _dataContext.Restaurant.FirstOrDefault(o => o.Id == value.EvaId && o.IsDelete == 0);
                         if (restaurant == null) return BadRequest();
                         else restaurant.NumberOfEvaluate += 1;
-                        evaluate.CityId = value.EvaId;
-                        evaluate.TourId = value.EvaId;
-                        evaluate.HotelId = value.EvaId;
-                        evaluate.RestaurantId = value.EvaId;
+                        //evaluate.CityId = value.EvaId;
+                        //evaluate.TourId = value.EvaId;
+                        //evaluate.HotelId = value.EvaId;
+                        //evaluate.RestaurantId = value.EvaId;
+                        evaluate.CityId = 1;
+                        evaluate.TourId = 1;
+                        evaluate.HotelId = 1;
+                        evaluate.RestaurantId = 1;
                         break;
                 }
+                evaluate.User = null;
                 _dataContext.Evaluate.Add(evaluate);
                 _dataContext.SaveChanges();
                 return Ok(evaluate);
@@ -202,6 +224,8 @@ namespace VietTravelApi.Controllers
         {
             try
             {
+                string token = HttpContext.Request.Headers["Authorization"];
+                if (token == null ||  !_jwt.Auth("Customer", token)) return Unauthorized("Yêu cầu xác thực người dùng");
                 var evaluate = _dataContext.Evaluate.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 if (evaluate != null)
                 {
@@ -222,6 +246,8 @@ namespace VietTravelApi.Controllers
         {
             try
             {
+                string token = HttpContext.Request.Headers["Authorization"];
+                if (token == null || !_jwt.Auth("Customer", token)) return Unauthorized("Yêu cầu xác thực người dùng");
                 var evaluate = _dataContext.Evaluate.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 if (evaluate != null)
                 {

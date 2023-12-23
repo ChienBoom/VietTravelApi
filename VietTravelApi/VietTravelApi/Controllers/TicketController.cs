@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using VietTravelApi.Common;
 using VietTravelApi.Context;
 using VietTravelApi.Models;
 
@@ -13,9 +14,11 @@ namespace VietTravelApi.Controllers
     public class TicketController : ControllerBase
     {
         public DataContext _dataContext;
-        public TicketController(DataContext dataContext)
+        public Jwt _jwt;
+        public TicketController(DataContext dataContext, Jwt jwt)
         {
             _dataContext = dataContext;
+            _jwt = jwt;
         }
 
         [HttpGet]
@@ -67,6 +70,8 @@ namespace VietTravelApi.Controllers
             Ticket Ticket = value;
             try
             {
+                string token = HttpContext.Request.Headers["Authorization"];
+                if (token == null || (!_jwt.Auth("Customer", token) && !_jwt.Auth("Admin", token))) return Unauthorized("Yêu cầu xác thực người dùng");
                 _dataContext.Ticket.Add(Ticket);
                 _dataContext.SaveChanges();
                 return Ok(Ticket);
@@ -82,6 +87,8 @@ namespace VietTravelApi.Controllers
         {
             try
             {
+                string token = HttpContext.Request.Headers["Authorization"];
+                if (token == null || (!_jwt.Auth("Customer", token) && !_jwt.Auth("Admin", token))) return Unauthorized("Yêu cầu xác thực người dùng");
                 var Ticket = _dataContext.Ticket.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 if (Ticket != null)
                 {
@@ -102,6 +109,8 @@ namespace VietTravelApi.Controllers
         {
             try
             {
+                string token = HttpContext.Request.Headers["Authorization"];
+                if (token == null || (!_jwt.Auth("Customer", token) && !_jwt.Auth("Admin", token))) return Unauthorized("Yêu cầu xác thực người dùng");
                 var Ticket = _dataContext.Ticket.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 if (Ticket != null)
                 {

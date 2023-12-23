@@ -5,6 +5,7 @@ using System;
 using VietTravelApi.Context;
 using VietTravelApi.Models;
 using System.Linq;
+using VietTravelApi.Common;
 
 namespace VietTravelApi.Controllers
 {
@@ -13,9 +14,11 @@ namespace VietTravelApi.Controllers
     public class EventController : ControllerBase
     {
         public DataContext _dataContext;
-        public EventController(DataContext dataContext)
+        public Jwt _jwt;
+        public EventController(DataContext dataContext, Jwt jwt)
         {
             _dataContext = dataContext;
+            _jwt = jwt;
         }
 
         [HttpGet]
@@ -67,6 +70,8 @@ namespace VietTravelApi.Controllers
             Event Event = value;
             try
             {
+                string token = HttpContext.Request.Headers["Authorization"];
+                if (token == null || !_jwt.Auth("Admin", token)) return Unauthorized("Yêu cầu xác thực người dùng");
                 _dataContext.Event.Add(Event);
                 _dataContext.SaveChanges();
                 return Ok(Event);
@@ -82,6 +87,8 @@ namespace VietTravelApi.Controllers
         {
             try
             {
+                string token = HttpContext.Request.Headers["Authorization"];
+                if (token == null || !_jwt.Auth("Admin", token)) return Unauthorized("Yêu cầu xác thực người dùng");
                 var Event = _dataContext.Event.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 if (Event != null)
                 {
@@ -103,6 +110,8 @@ namespace VietTravelApi.Controllers
         {
             try
             {
+                string token = HttpContext.Request.Headers["Authorization"];
+                if (token == null || !_jwt.Auth("Admin", token)) return Unauthorized("Yêu cầu xác thực người dùng");
                 var Event = _dataContext.Event.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 if (Event != null)
                 {

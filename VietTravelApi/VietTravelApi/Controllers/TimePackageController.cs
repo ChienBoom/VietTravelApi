@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
+using VietTravelApi.Common;
 using VietTravelApi.Context;
 using VietTravelApi.Models;
 
@@ -12,9 +13,11 @@ namespace VietTravelApi.Controllers
     public class TimePackageController : ControllerBase
     {
         public DataContext _dataContext;
-        public TimePackageController(DataContext dataContext)
+        public Jwt _jwt;
+        public TimePackageController(DataContext dataContext, Jwt jwt)
         {
             _dataContext = dataContext;
+            _jwt = jwt;
         }
 
         [HttpGet]
@@ -66,6 +69,8 @@ namespace VietTravelApi.Controllers
             TimePackage TimePackage = value;
             try
             {
+                string token = HttpContext.Request.Headers["Authorization"];
+                if (token == null || !_jwt.Auth("Admin", token)) return Unauthorized("Yêu cầu xác thực người dùng");
                 _dataContext.TimePackage.Add(TimePackage);
                 _dataContext.SaveChanges();
                 return Ok(TimePackage);
@@ -81,6 +86,8 @@ namespace VietTravelApi.Controllers
         {
             try
             {
+                string token = HttpContext.Request.Headers["Authorization"];
+                if (token == null || !_jwt.Auth("Admin", token)) return Unauthorized("Yêu cầu xác thực người dùng");
                 var TimePackage = _dataContext.TimePackage.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 if (TimePackage != null)
                 {
@@ -101,6 +108,8 @@ namespace VietTravelApi.Controllers
         {
             try
             {
+                string token = HttpContext.Request.Headers["Authorization"];
+                if (token == null || !_jwt.Auth("Admin", token)) return Unauthorized("Yêu cầu xác thực người dùng");
                 var TimePackage = _dataContext.TimePackage.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 if (TimePackage != null)
                 {

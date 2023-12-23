@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using VietTravelApi.Common;
 using VietTravelApi.Context;
 using VietTravelApi.Models;
 
@@ -13,9 +14,11 @@ namespace VietTravelApi.Controllers
     public class TourPackageController : ControllerBase
     {
         public DataContext _dataContext;
-        public TourPackageController(DataContext dataContext)
+        public Jwt _jwt;
+        public TourPackageController(DataContext dataContext, Jwt jwt)
         {
             _dataContext = dataContext;
+            _jwt = jwt;
         }
 
         [HttpGet]
@@ -81,6 +84,8 @@ namespace VietTravelApi.Controllers
             TourPackage TourPackage = value;
             try
             {
+                string token = HttpContext.Request.Headers["Authorization"];
+                if (token == null || (!_jwt.Auth("Admin", token) && !_jwt.Auth("Customer", token))) return Unauthorized("Yêu cầu xác thực người dùng");
                 _dataContext.TourPackage.Add(TourPackage);
                 _dataContext.SaveChanges();
                 return Ok(TourPackage);
@@ -96,6 +101,8 @@ namespace VietTravelApi.Controllers
         {
             try
             {
+                string token = HttpContext.Request.Headers["Authorization"];
+                if (token == null || (!_jwt.Auth("Admin", token) && !_jwt.Auth("Customer", token))) return Unauthorized("Yêu cầu xác thực người dùng");
                 var TourPackage = _dataContext.TourPackage.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 if (TourPackage != null)
                 {
@@ -116,6 +123,8 @@ namespace VietTravelApi.Controllers
         {
             try
             {
+                string token = HttpContext.Request.Headers["Authorization"];
+                if (token == null || (!_jwt.Auth("Admin", token) && !_jwt.Auth("Customer", token))) return Unauthorized("Yêu cầu xác thực người dùng");
                 var TourPackage = _dataContext.TourPackage.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 if (TourPackage != null)
                 {
