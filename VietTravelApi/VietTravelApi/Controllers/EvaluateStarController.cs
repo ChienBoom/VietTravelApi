@@ -232,41 +232,63 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                string token = HttpContext.Request.Headers["Authorization"];
-                if (token == null || !_jwt.Auth("Customer", token)) return Unauthorized("Yêu cầu xác thực người dùng");
-                var evaluateStar = _dataContext.EvaluateStar.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
+                //string token = HttpContext.Request.Headers["Authorization"];
+                //if (token == null || !_jwt.Auth("Customer", token)) return Unauthorized("Yêu cầu xác thực người dùng");
+                EvaluateStar evaluateStar = _dataContext.EvaluateStar.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
+                EvaluateStar evaluateStarUpdate = evaluateStar;
+                evaluateStarUpdate.NumberStar = value.NumberStar;
                 if (evaluateStar != null)
                 {
-                    switch (value.Eva)
+                    switch (evaluateStar.Eva)
                     {
                         case 1:
-                            City city = _dataContext.City.FirstOrDefault(o => o.Id == value.EvaId && o.IsDelete == 0);
+                            City city = _dataContext.City.FirstOrDefault(o => o.Id == evaluateStar.EvaId && o.IsDelete == 0);
                             if (city == null) return NotFound();
                             List<EvaluateStar> evaluateStarCitys = _dataContext.EvaluateStar.Where(o => o.Eva == 1 && o.EvaId == city.Id && o.IsDelete == 0).ToList();
-                            city.MediumStar = (float)(evaluateStarCitys.Sum(o => o.NumberStar) + value.NumberStar - evaluateStar.NumberStar) / (city.NumberOfEvaluateStar);
+                            city.MediumStar = (float)(evaluateStarCitys.Sum(o => o.NumberStar) + evaluateStarUpdate.NumberStar - evaluateStar.NumberStar) / (evaluateStarCitys.Count());
+                            //Capnhatrangbuoc - khongquantrong
+                            //value.CityId = 1;
+                            //value.TourId = 1;
+                            //value.HotelId = 1;
+                            //value.RestaurantId = 1;
                             break;
                         case 2:
-                            Tour tour = _dataContext.Tour.FirstOrDefault(o => o.Id == value.EvaId && o.IsDelete == 0);
+                            Tour tour = _dataContext.Tour.FirstOrDefault(o => o.Id == evaluateStar.EvaId && o.IsDelete == 0);
                             if (tour == null) return NotFound();
                             List<EvaluateStar> evaluateStarTours = _dataContext.EvaluateStar.Where(o => o.Eva == 2 && o.EvaId == tour.Id && o.IsDelete == 0).ToList();
-                            tour.MediumStar = (float)(evaluateStarTours.Sum(o => o.NumberStar) + value.NumberStar - evaluateStar.NumberStar) / (tour.NumberOfEvaluateStar);
+                            tour.MediumStar = (float)(evaluateStarTours.Sum(o => o.NumberStar) + evaluateStarUpdate.NumberStar - evaluateStar.NumberStar) / (evaluateStarTours.Count());
+                            //Capnhatrangbuoc - khongquantrong
+                            //value.CityId = 1;
+                            //value.TourId = 1;
+                            //value.HotelId = 1;
+                            //value.RestaurantId = 1;
                             break;
                         case 3:
-                            Hotel hotel = _dataContext.Hotel.FirstOrDefault(o => o.Id == value.EvaId && o.IsDelete == 0);
+                            Hotel hotel = _dataContext.Hotel.FirstOrDefault(o => o.Id == evaluateStar.EvaId && o.IsDelete == 0);
                             if (hotel == null) return NotFound();
                             List<EvaluateStar> evaluateStarHotels = _dataContext.EvaluateStar.Where(o => o.Eva == 3 && o.EvaId == hotel.Id && o.IsDelete == 0).ToList();
-                            hotel.MediumStar = (float)(evaluateStarHotels.Sum(o => o.NumberStar) + value.NumberStar - evaluateStar.NumberStar) / (hotel.NumberOfEvaluateStar);
+                            hotel.MediumStar = (float)(evaluateStarHotels.Sum(o => o.NumberStar) + evaluateStarUpdate.NumberStar - evaluateStar.NumberStar) / (evaluateStarHotels.Count());
+                            //Capnhatrangbuoc - khongquantrong
+                            //value.CityId = 1;
+                            //value.TourId = 1;
+                            //value.HotelId = 1;
+                            //value.RestaurantId = 1;
                             break;
                         case 4:
-                            Restaurant restaurant = _dataContext.Restaurant.FirstOrDefault(o => o.Id == value.EvaId && o.IsDelete == 0);
+                            Restaurant restaurant = _dataContext.Restaurant.FirstOrDefault(o => o.Id == evaluateStar.EvaId && o.IsDelete == 0);
                             if (restaurant == null) return NotFound();
                             List<EvaluateStar> evaluateStarRes = _dataContext.EvaluateStar.Where(o => o.Eva == 4 && o.EvaId == restaurant.Id && o.IsDelete == 0).ToList();
-                            restaurant.MediumStar = (float)(evaluateStarRes.Sum(o => o.NumberStar) + value.NumberStar - evaluateStar.NumberStar) / (restaurant.NumberOfEvaluateStar);
+                            restaurant.MediumStar = (float)(evaluateStarRes.Sum(o => o.NumberStar) + evaluateStarUpdate.NumberStar - evaluateStar.NumberStar) / (evaluateStarRes.Count());
+                            //Capnhatrangbuoc - khongquantrong
+                            //value.CityId = 1;
+                            //value.TourId = 1;
+                            //value.HotelId = 1;
+                            //value.RestaurantId = 1;
                             break;
                     }
-                    _dataContext.Entry(evaluateStar).CurrentValues.SetValues(value);
+                    _dataContext.Entry(evaluateStar).CurrentValues.SetValues(evaluateStarUpdate);
                     _dataContext.SaveChanges();
-                    return Ok(value);
+                    return Ok(evaluateStarUpdate);
                 }
                 return NotFound();
             }
