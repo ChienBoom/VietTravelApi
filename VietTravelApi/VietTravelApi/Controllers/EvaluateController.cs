@@ -227,9 +227,11 @@ namespace VietTravelApi.Controllers
                 string token = HttpContext.Request.Headers["Authorization"];
                 if (token == null ||  !_jwt.Auth("Customer", token)) return Unauthorized("Yêu cầu xác thực người dùng");
                 var evaluate = _dataContext.Evaluate.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
+                var evaluateUpdate = evaluate;
+                evaluateUpdate.Content = value.Content;
                 if (evaluate != null)
                 {
-                    _dataContext.Entry(evaluate).CurrentValues.SetValues(value);
+                    _dataContext.Entry(evaluate).CurrentValues.SetValues(evaluateUpdate);
                     _dataContext.SaveChanges();
                     return Ok(value);
                 }
@@ -251,6 +253,25 @@ namespace VietTravelApi.Controllers
                 var evaluate = _dataContext.Evaluate.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 if (evaluate != null)
                 {
+                    switch (evaluate.Eva)
+                    {
+                        case 1:
+                            City city = _dataContext.City.Where(o => o.Id == evaluate.EvaId && o.IsDelete == 0).FirstOrDefault();
+                            city.NumberOfEvaluate -= 1;
+                            break;
+                        case 2:
+                            Tour tour = _dataContext.Tour.Where(o => o.Id == evaluate.EvaId && o.IsDelete == 0).FirstOrDefault();
+                            tour.NumberOfEvaluate -= 1;
+                            break;
+                        case 3:
+                            Hotel hotel = _dataContext.Hotel.Where(o => o.Id == evaluate.EvaId && o.IsDelete == 0).FirstOrDefault();
+                            hotel.NumberOfEvaluate -= 1;
+                            break;
+                        case 4:
+                            Restaurant restaurant = _dataContext.Restaurant.Where(o => o.Id == evaluate.EvaId && o.IsDelete == 0).FirstOrDefault();
+                            restaurant.NumberOfEvaluate -= 1;
+                            break;
+                    }
                     //_dataContext.Remove(evaluate);
                     evaluate.IsDelete = 1;
                     _dataContext.SaveChanges();

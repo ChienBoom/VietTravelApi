@@ -232,8 +232,8 @@ namespace VietTravelApi.Controllers
         {
             try
             {
-                //string token = HttpContext.Request.Headers["Authorization"];
-                //if (token == null || !_jwt.Auth("Customer", token)) return Unauthorized("Yêu cầu xác thực người dùng");
+                string token = HttpContext.Request.Headers["Authorization"];
+                if (token == null || !_jwt.Auth("Customer", token)) return Unauthorized("Yêu cầu xác thực người dùng");
                 EvaluateStar evaluateStar = _dataContext.EvaluateStar.Where(o => o.IsDelete == 0).FirstOrDefault(b => b.Id == id);
                 EvaluateStar evaluateStarUpdate = evaluateStar;
                 evaluateStarUpdate.NumberStar = value.NumberStar;
