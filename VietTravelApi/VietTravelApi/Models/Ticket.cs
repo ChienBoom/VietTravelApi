@@ -22,6 +22,9 @@ namespace VietTravelApi.Models
 		[NotMapped]
 		[JsonIgnore]
 		public User User { get; set; }
+		//User cho phan ticketManagement
+		[NotMapped]
+		public User UserTicket { get; set; }
         [NotMapped]
         public TourPackage TourPackage { get; set; }
 		public int IsDelete { get; set; } // 1 là đã xóa, 0 là chưa xóa

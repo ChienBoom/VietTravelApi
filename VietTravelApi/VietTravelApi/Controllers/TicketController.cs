@@ -152,7 +152,8 @@ namespace VietTravelApi.Controllers
                 List<Ticket> tickets = _dataContext.Ticket.Where(b => b.IsDelete == 0).OrderByDescending(o => o.BookingDate).ToList();
                 foreach (Ticket item in tickets)
                 {
-                    item.User = _dataContext.User.FirstOrDefault(o => o.Id == item.UserId);
+                    item.UserTicket = _dataContext.User.FirstOrDefault(o => o.Id == item.UserId);
+                    item.UserTicket.Tickets = null;
                     item.TourPackage = _dataContext.TourPackage.FirstOrDefault(o => o.Id == item.TourPackageId);
                     item.TourPackage.Hotel = _dataContext.Hotel.FirstOrDefault(o => o.Id == item.TourPackage.HotelId);
                     item.TourPackage.Restaurant = _dataContext.Restaurant.FirstOrDefault(o => o.Id == item.TourPackage.RestaurantId);
