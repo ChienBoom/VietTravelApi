@@ -23,8 +23,8 @@ namespace VietTravelApi.Controllers
         }
 
         [HttpGet]
-        [Route("revenueStatisticCity")]
-        public IActionResult RevenueStatisticCity()
+        [Route("revenueStatisticCity/{year}")]
+        public IActionResult RevenueStatisticCity(int year)
         {
             try
             {
@@ -41,7 +41,7 @@ namespace VietTravelApi.Controllers
                                        join tourPackage in _dataContext.TourPackage on ticket.TourPackageId equals tourPackage.Id
                                        join tour in _dataContext.Tour on tourPackage.TourId equals tour.Id
                                        join city in _dataContext.City on tour.CityId equals city.Id
-                                       where city.Id == item.Id && tour.IsDelete ==0 && ticket.IsDelete ==0
+                                       where city.Id == item.Id && tour.IsDelete == 0 && ticket.IsDelete == 0 && ticket.BookingDate.Year == year
                                        select new
                                        {
                                            ticket,
@@ -80,8 +80,8 @@ namespace VietTravelApi.Controllers
         }
 
         [HttpGet]
-        [Route("revenueStatisticTour")]
-        public IActionResult RevenueStatisticTour()
+        [Route("revenueStatisticTour/{year}")]
+        public IActionResult RevenueStatisticTour(int year)
         {
             try
             {
@@ -97,7 +97,7 @@ namespace VietTravelApi.Controllers
                         var tickets = (from ticket in _dataContext.Ticket
                                        join tourPackage in _dataContext.TourPackage on ticket.TourPackageId equals tourPackage.Id
                                        join tour in _dataContext.Tour on tourPackage.TourId equals tour.Id
-                                       where tour.Id == item.Id && ticket.IsDelete == 0
+                                       where tour.Id == item.Id && ticket.IsDelete == 0 && ticket.BookingDate.Year == year
                                        select new
                                        {
                                            ticket,
@@ -136,8 +136,8 @@ namespace VietTravelApi.Controllers
         }
 
         [HttpGet]
-        [Route("revenueStatisticMonth")]
-        public IActionResult RevenueStatisticMonth()
+        [Route("revenueStatisticMonth/{year}")]
+        public IActionResult RevenueStatisticMonth(int year)
         {
             try
             {
@@ -149,7 +149,7 @@ namespace VietTravelApi.Controllers
                     Labels.Add("Tháng " + i.ToString());
                     var tickets = (from ticket in _dataContext.Ticket
                                    join tourPackage in _dataContext.TourPackage on ticket.TourPackageId equals tourPackage.Id
-                                   where ticket.BookingDate.Month == i && ticket.IsDelete == 0
+                                   where ticket.BookingDate.Month == i && ticket.IsDelete == 0 && ticket.BookingDate.Year == year
                                    select new
                                    {
                                        ticket,
