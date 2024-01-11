@@ -45,5 +45,14 @@ namespace VietTravelApi.Models
 		public List<EvaluateStar> EvaluateStars { get; set; }
 		[NotMapped]
 		public List<TourPackage> TourPackages { get; set; }
+
+		//
+		//public int TotalRoom { get; set; }
+		//public int VipRoom { get; set; }
+		//public int NormalRoom { get; set; }
+		////public int RemainingVipRoom { get; set; }
+		////public int RemainingNormalRoom { get; set; }
+		//public decimal PriceVipRoom { get; set; }
+		//public decimal PriceNormalRoom { get; set; }
 	}
 }
